@@ -182,9 +182,9 @@ object MainForm: TMainForm
       object LabelArytm: TLabel
         Left = 8
         Top = 146
-        Width = 73
+        Width = 76
         Height = 18
-        Caption = 'Przybli'#380'enie'
+        Caption = 'Arytmetyka'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -15
@@ -287,7 +287,7 @@ object MainForm: TMainForm
         Top = 165
         Width = 140
         Height = 17
-        Caption = 'RadioButtonZmienno'
+        Caption = 'Zmiennopozycyjna'
         Checked = True
         TabOrder = 6
         TabStop = True
@@ -297,7 +297,7 @@ object MainForm: TMainForm
         Top = 183
         Width = 140
         Height = 17
-        Caption = 'RadioButtonPrzedzialowa'
+        Caption = 'Przedzia'#322'owa'
         TabOrder = 7
       end
       object ButtonClear: TButton
@@ -405,6 +405,7 @@ object MainForm: TMainForm
     Top = 376
     object Application: TMenuItem
       Caption = '&Aplikacja'
+      OnClick = ApplicationClick
     end
     object HelpOption: TMenuItem
       Caption = '&Pomoc'

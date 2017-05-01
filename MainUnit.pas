@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType, JacobiEqu;
+  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType, JacobiEqu, AppInfo;
 
 type
   TMainForm = class(TForm)
@@ -63,6 +63,8 @@ type
     procedure ImportExample(Number : Integer);
     procedure ButtonReadExampleClick(Sender: TObject);
     procedure WriteExample();
+    procedure StoreResults();
+    procedure ApplicationClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -71,7 +73,8 @@ type
 
 var
   MainForm: TMainForm;
-  n, mit : Integer;
+  //AppForm : TApplicationData;
+  n, mit, st, it : Integer;
   eps : Extended;
   a : matrix;
   b, x : vector;
@@ -171,7 +174,7 @@ var
   i, j : Integer;
 begin
   for j := 1 to StringGridEquations.ColCount - 2 do
-    StringGridEquations.Cells[j, 0] := 'x(' + IntToStr(j) + ')';
+    StringGridEquations.Cells[j, 0] := 'x[' + IntToStr(j) + ']';
 
   StringGridEquations.Cells[StringGridEquations.ColCount - 1, 0] := 'Wartoœæ B';
 
@@ -179,7 +182,7 @@ begin
     StringGridEquations.Cells[0, j] := 'Równanie ' + IntToStr(j);
 
   for j := 1 to StringGridStartVal.ColCount - 1 do
-    StringGridStartVal.Cells[j, 0] := 'x(' + IntToStr(j) + ')';
+    StringGridStartVal.Cells[j, 0] := 'x[' + IntToStr(j) + ']';
 
   StringGridStartVal.Cells[0, 1] := 'Wartoœæ';
 
@@ -198,6 +201,11 @@ begin
 end;
 
 { CLEAR RESULTS IN MEMORESULTS }
+procedure TMainForm.ApplicationClick(Sender: TObject);
+begin
+  AppInfo.ApplicationData.Show();
+end;
+
 procedure TMainForm.ButtonClearClick(Sender: TObject);
 begin
   PrepareStringGrids(TRUE);
@@ -225,12 +233,55 @@ procedure TMainForm.ButtonSolveClick(Sender: TObject);
 begin
   n := StrToInt(VarNumber.Text);
   mit := StrToInt(IterNumber.Text);
-  eps := StrToInt(EditEpsilon.Text);
+  eps := Exp(-StrToInt(EditEpsilon.Text));
+
+  // Odczyt pól z Gridów do tablic
+
+  Jacobi(n, a, b, mit, eps, x, it, st);
+
+  StoreResults();
+end;
+
+procedure TMainForm.StoreResults();
+var
+  i : Integer;
+begin
+  MemoResults.Clear();
+  MemoResults.Lines.Add('Wynik obliczeñ dla wprowadzonych danych uk³adu równañ:');
+  MemoResults.Lines.Add('');
+  case st of
+    0:
+      begin
+        MemoResults.Lines.Add('SUKCES!');
+      end;
+    1:
+      begin
+        MemoResults.Lines.Add('B£¥D - Liczba zmiennych nie mo¿e byæ mniejsza od 1.');
+      end;
+    2:
+      begin
+        MemoResults.Lines.Add('B£¥D - Macierz A jest osobliwa.');
+      end;
+    3:
+      begin
+        MemoResults.Lines.Add('CZÊŒCIOWY B£¥D - Wymagana dok³adnoœæ rozwi¹zania'
+          + ' niezosta³a osi¹gniêta po ' + Format('%d', [mit]) + ' iteracjach.');
+      end;
+  end;
+
+  WriteLn(eps);
+  if(st = 0) OR (st = 3) then
+  begin
+     for i := 1 to n do
+        MemoResults.Lines.Add('x[' + IntToStr(i) + '] = ' + Format('%e', [x[i]]));
+     MemoResults.Lines.Add('Liczba iteracji = ' + Format('%d', [it]));
+  end;
 end;
 
 { CLOSE APPLICATIONS AS OPTION IN MENU }
 procedure TMainForm.CloseApplicationClick(Sender: TObject);
 begin
+  AppInfo.ApplicationData.Close();
   MainForm.Close();
 end;
 
