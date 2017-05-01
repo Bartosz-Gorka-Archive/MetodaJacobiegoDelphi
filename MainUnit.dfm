@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  Caption = 'Form1'
-  ClientHeight = 202
-  ClientWidth = 447
+  Caption = 'Metoda Jacobiego - Bartosz G'#243'rka INF127228'
+  ClientHeight = 478
+  ClientWidth = 782
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
