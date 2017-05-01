@@ -18,12 +18,24 @@ type
     CloseApplication: TMenuItem;
     LabelSetting: TLabel;
     VarNumber: TEdit;
-    Button1: TButton;
+    ButtonSolve: TButton;
     UpDownVarNumber: TUpDown;
+    LabelVarNumber: TLabel;
+    LabelIterNumber: TLabel;
+    UpDownIterNumber: TUpDown;
+    IterNumber: TEdit;
+    LabelEpsilon: TLabel;
     Label1: TLabel;
+    EditEpsilon: TEdit;
+    UpDownEpsilon: TUpDown;
+    Panel4: TPanel;
+    Splitter2: TSplitter;
+    Memo1: TMemo;
     procedure CloseApplicationClick(Sender: TObject);
     procedure HelpOptionClick(Sender: TObject);
     procedure VarNumberChange(Sender: TObject);
+    procedure IterNumberChange(Sender: TObject);
+    procedure EditEpsilonChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -44,9 +56,33 @@ begin
 end;
 
 { OPEN HELP FORM WITH INFORMATIONS HOW TO USE A PROGRAM }
+procedure TMainForm.EditEpsilonChange(Sender: TObject);
+begin
+  if(EditEpsilon.Text <> '') then
+  begin
+    if(StrToInt(EditEpsilon.Text) < 1) then
+      EditEpsilon.Text := '1';
+    if(StrToInt(EditEpsilon.Text) > 16) then
+      EditEpsilon.Text := '16';
+  end
+  else
+    EditEpsilon.Text := '14';
+end;
+
 procedure TMainForm.HelpOptionClick(Sender: TObject);
 begin
   //
+end;
+
+procedure TMainForm.IterNumberChange(Sender: TObject);
+begin
+  if(IterNumber.Text <> '') then
+  begin
+    if(StrToInt(IterNumber.Text) < 1) then
+      IterNumber.Text := '1';
+  end
+  else
+    IterNumber.Text := '1';
 end;
 
 procedure TMainForm.VarNumberChange(Sender: TObject);
