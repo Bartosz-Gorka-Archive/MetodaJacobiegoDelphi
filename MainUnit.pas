@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls;
+  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd;
 
 type
   TMainForm = class(TForm)
@@ -25,17 +25,36 @@ type
     UpDownIterNumber: TUpDown;
     IterNumber: TEdit;
     LabelEpsilon: TLabel;
-    Label1: TLabel;
+    LabelRownanie: TLabel;
     EditEpsilon: TEdit;
     UpDownEpsilon: TUpDown;
     Panel4: TPanel;
     Splitter2: TSplitter;
-    Memo1: TMemo;
+    RadioButtonZmienno: TRadioButton;
+    RadioButtonPrzedzialowa: TRadioButton;
+    LabelArytm: TLabel;
+    LabelClear: TLabel;
+    ButtonClear: TButton;
+    LabelExample: TLabel;
+    ExampleNumber: TEdit;
+    UpDown1: TUpDown;
+    ButtonReadExample: TButton;
+    LabelEquations: TLabel;
+    DrawGridEquations: TDrawGrid;
+    LabelFirstVal: TLabel;
+    LabelResults: TLabel;
+    DrawGridStartVal: TDrawGrid;
+    MemoResults: TMemo;
+    ButtonCopy: TButton;
+    ButtonClearResults: TButton;
     procedure CloseApplicationClick(Sender: TObject);
     procedure HelpOptionClick(Sender: TObject);
     procedure VarNumberChange(Sender: TObject);
     procedure IterNumberChange(Sender: TObject);
     procedure EditEpsilonChange(Sender: TObject);
+    procedure ExampleNumberChange(Sender: TObject);
+    procedure ButtonCopyClick(Sender: TObject);
+    procedure ButtonClearResultsClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -48,6 +67,19 @@ var
 implementation
 
 {$R *.dfm}
+
+{ CLEAR RESULTS IN MEMORESULTS }
+procedure TMainForm.ButtonClearResultsClick(Sender: TObject);
+begin
+  MemoResults.Clear;
+end;
+
+{ COPY RESULTS FROM MEMORESULTS TO CLIPBOARD }
+procedure TMainForm.ButtonCopyClick(Sender: TObject);
+begin
+  MemoResults.SelectAll;
+  MemoResults.CopyToClipboard;
+end;
 
 { CLOSE APPLICATIONS AS OPTION IN MENU }
 procedure TMainForm.CloseApplicationClick(Sender: TObject);
@@ -67,6 +99,19 @@ begin
   end
   else
     EditEpsilon.Text := '14';
+end;
+
+procedure TMainForm.ExampleNumberChange(Sender: TObject);
+begin
+  if(ExampleNumber.Text <> '') then
+  begin
+    if(StrToInt(ExampleNumber.Text) < 1) then
+      ExampleNumber.Text := '1';
+    if(StrToInt(ExampleNumber.Text) > 3) then
+      ExampleNumber.Text := '3';
+  end
+  else
+    ExampleNumber.Text := '1';
 end;
 
 procedure TMainForm.HelpOptionClick(Sender: TObject);
