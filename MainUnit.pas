@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType;
+  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType, JacobiEqu;
 
 type
   TMainForm = class(TForm)
@@ -60,6 +60,9 @@ type
     procedure PrepareStringGrids(Clear : Boolean);
     procedure FormCreate(Sender: TObject);
     procedure ButtonSolveClick(Sender: TObject);
+    procedure ImportExample(Number : Integer);
+    procedure ButtonReadExampleClick(Sender: TObject);
+    procedure WriteExample();
   private
     { Private declarations }
   public
@@ -68,11 +71,100 @@ type
 
 var
   MainForm: TMainForm;
-  n, mit, eps : Integer;
+  n, mit : Integer;
+  eps : Extended;
+  a : matrix;
+  b, x : vector;
 
 implementation
 
 {$R *.dfm}
+
+procedure TMainForm.ImportExample(Number : Integer);
+var
+  i: Integer;
+begin
+  // Przyk³ad 1
+  case Number of
+    1:
+      begin
+        n := 4;
+        SetLength(a, n + 1);
+        SetLength(b, n + 1);
+        SetLength(x, n + 1);
+        for i := 0 to n + 1 do
+          SetLength(a[i], n + 1);
+        a[1, 1] := 0;  a[1, 2] := 0; a[1, 3] := 1; a[1, 4] := 2;
+        a[2, 1] := 2;  a[2, 2] := 1; a[2, 3] := 0; a[2, 4] := 2;
+        a[3, 1] := 7;  a[3, 2] := 3; a[3, 3] := 0; a[3, 4] := 1;
+        a[4, 1] := 0;  a[4, 2] := 5; a[4, 3] := 0; a[4, 4] := 0;
+        b[1] := 1; b[2] := 1; b[3] := 1; b[4] := 1;
+        mit := 100;
+        eps := exp(-14);
+        x[1] := 0; x[2] := 0; x[3] := 0; x[4] := 0;
+      end;
+    2:
+      begin
+        n := 4;
+        SetLength(a, n + 1);
+        SetLength(b, n + 1);
+        SetLength(x, n + 1);
+        for i := 0 to n + 1 do
+          SetLength(a[i], n + 1);
+        a[1, 1] := -12.235;  a[1, 2] := 1.229; a[1, 3] := 0.5597; a[1, 4] := 0;
+        a[2, 1] := 1.229;  a[2, 2] := -6.78; a[2, 3] := 0.765; a[2, 4] := 0;
+        a[3, 1] := 0.5597;  a[3, 2] := 0.765; a[3, 3] := 91.0096; a[3, 4] := 2;
+        a[4, 1] := 0;  a[4, 2] := 0; a[4, 3] := -2; a[4, 4] := 5.5;
+        b[1] := 0.956; b[2] := 51.5603; b[3] := 2; b[4] := 5.8;
+        mit := 10;
+        eps := exp(-14);
+        x[1] := 2; x[2] := 0.75; x[3] := -1; x[4] := 0.9;
+      end;
+    3:
+      begin
+        n := 4;
+        SetLength(a, n + 1);
+        SetLength(b, n + 1);
+        SetLength(x, n + 1);
+        for i := 0 to n + 1 do
+          SetLength(a[i], n + 1);
+        a[1, 1] := -12.235;  a[1, 2] := 1.229; a[1, 3] := 0.5597; a[1, 4] := 0;
+        a[2, 1] := 1.229;  a[2, 2] := -6.78; a[2, 3] := 0.765; a[2, 4] := 0;
+        a[3, 1] := 0.5597;  a[3, 2] := 0.765; a[3, 3] := 91.0096; a[3, 4] := 2;
+        a[4, 1] := 0;  a[4, 2] := 0; a[4, 3] := -2; a[4, 4] := 5.5;
+        b[1] := 0.956; b[2] := 51.5603; b[3] := 2; b[4] := 5.8;
+        mit := 100;
+        eps := exp(-14);
+        x[1] := 2; x[2] := 0.75; x[3] := -1; x[4] := 0.9;
+      end;
+    else
+      begin
+        ShowMessage('B³¹d przy wczytywaniu przyk³adu!');
+      end;
+  end;
+
+  WriteLn(IntToStr(n));
+
+end;
+
+procedure TMainForm.WriteExample();
+var
+  i, j : Integer;
+begin
+  EditEpsilon.Text := IntToStr(14);
+  IterNumber.Text := IntToStr(mit);
+  VarNumber.Text := IntToStr(n);
+
+  for j := 1 to StringGridStartVal.ColCount - 1 do
+      StringGridStartVal.Cells[j, 1] := FloatToStr(x[j]);
+
+    for i := 1 to StringGridEquations.RowCount - 1 do
+    begin
+      for j := 1 to StringGridEquations.ColCount - 2 do
+        StringGridEquations.Cells[j, i] := FloatToStr(a[i, j]);
+      StringGridEquations.Cells[StringGridEquations.ColCount - 1, i] := FloatToStr(b[i]);
+    end;
+end;
 
 procedure TMainForm.PrepareStringGrids(Clear : Boolean);
 var
@@ -121,6 +213,12 @@ procedure TMainForm.ButtonCopyClick(Sender: TObject);
 begin
   MemoResults.SelectAll;
   MemoResults.CopyToClipboard;
+end;
+
+procedure TMainForm.ButtonReadExampleClick(Sender: TObject);
+begin
+  ImportExample(StrToInt(ExampleNumber.Text));
+  WriteExample();
 end;
 
 procedure TMainForm.ButtonSolveClick(Sender: TObject);

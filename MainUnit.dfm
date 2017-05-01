@@ -316,6 +316,7 @@ object MainForm: TMainForm
         Height = 25
         Caption = 'W&czytaj'
         TabOrder = 9
+        OnClick = ButtonReadExampleClick
       end
       object IterNumber: TEdit
         Left = 143
