@@ -4,10 +4,18 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs;
+  Dialogs, ExtCtrls, Menus;
 
 type
   TForm1 = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Splitter1: TSplitter;
+    MainMenu1: TMainMenu;
+    Aplikacja1: TMenuItem;
+    Pomoc1: TMenuItem;
+    Zamknij1: TMenuItem;
   private
     { Private declarations }
   public
