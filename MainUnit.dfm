@@ -2,7 +2,7 @@ object MainForm: TMainForm
   Left = 299
   Top = 118
   Caption = 'Metoda Jacobiego - Bartosz G'#243'rka INF127228'
-  ClientHeight = 407
+  ClientHeight = 419
   ClientWidth = 769
   Color = clBtnFace
   Constraints.MinHeight = 100
@@ -17,14 +17,14 @@ object MainForm: TMainForm
   Position = poDesigned
   DesignSize = (
     769
-    407)
+    419)
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
     Top = 0
     Width = 769
-    Height = 406
+    Height = 418
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'Panel1'
     ShowCaption = False
@@ -33,7 +33,7 @@ object MainForm: TMainForm
     object Splitter1: TSplitter
       Left = 209
       Top = 1
-      Height = 404
+      Height = 416
       ResizeStyle = rsUpdate
       ExplicitLeft = 583
       ExplicitTop = 2
@@ -42,7 +42,7 @@ object MainForm: TMainForm
     object Splitter2: TSplitter
       Left = 580
       Top = 1
-      Height = 404
+      Height = 416
       Align = alRight
       ExplicitLeft = 584
       ExplicitTop = 0
@@ -52,7 +52,7 @@ object MainForm: TMainForm
       Left = 212
       Top = 1
       Width = 368
-      Height = 404
+      Height = 416
       Align = alClient
       Caption = 'Panel2'
       ShowCaption = False
@@ -91,7 +91,7 @@ object MainForm: TMainForm
         Top = 35
         Width = 362
         Height = 272
-        ColCount = 3
+        ColCount = 4
         RowCount = 3
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
         TabOrder = 0
@@ -100,7 +100,7 @@ object MainForm: TMainForm
         Left = 3
         Top = 346
         Width = 362
-        Height = 54
+        Height = 70
         ColCount = 3
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
@@ -111,7 +111,7 @@ object MainForm: TMainForm
       Left = 1
       Top = 1
       Width = 208
-      Height = 404
+      Height = 416
       Align = alLeft
       Caption = 'Panel3'
       Constraints.MinWidth = 30
@@ -358,7 +358,7 @@ object MainForm: TMainForm
       Left = 583
       Top = 1
       Width = 185
-      Height = 404
+      Height = 416
       Align = alRight
       Caption = 'Panel4'
       ShowCaption = False

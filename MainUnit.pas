@@ -55,6 +55,7 @@ type
     procedure ExampleNumberChange(Sender: TObject);
     procedure ButtonCopyClick(Sender: TObject);
     procedure ButtonClearResultsClick(Sender: TObject);
+    procedure ResizeGrids(value : Integer);
   private
     { Private declarations }
   public
@@ -139,6 +140,16 @@ begin
   end
   else
     VarNumber.Text := '2';
+
+  ResizeGrids(StrToInt(VarNumber.Text));
+end;
+
+procedure TMainForm.ResizeGrids(value : Integer);
+begin
+  DrawGridEquations.ColCount := value + 2;
+  DrawGridEquations.RowCount := value + 1;
+
+  DrawGridStartVal.ColCount := value + 1;
 end;
 
 end.
