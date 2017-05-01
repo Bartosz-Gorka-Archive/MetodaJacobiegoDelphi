@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd;
+  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType;
 
 type
   TMainForm = class(TForm)
@@ -40,13 +40,13 @@ type
     UpDown1: TUpDown;
     ButtonReadExample: TButton;
     LabelEquations: TLabel;
-    DrawGridEquations: TDrawGrid;
     LabelFirstVal: TLabel;
     LabelResults: TLabel;
-    DrawGridStartVal: TDrawGrid;
     MemoResults: TMemo;
     ButtonCopy: TButton;
     ButtonClearResults: TButton;
+    StringGridEquations: TStringGrid;
+    StringGridStartVal: TStringGrid;
     procedure CloseApplicationClick(Sender: TObject);
     procedure HelpOptionClick(Sender: TObject);
     procedure VarNumberChange(Sender: TObject);
@@ -56,6 +56,10 @@ type
     procedure ButtonCopyClick(Sender: TObject);
     procedure ButtonClearResultsClick(Sender: TObject);
     procedure ResizeGrids(value : Integer);
+    procedure ButtonClearClick(Sender: TObject);
+    procedure PrepareStringGrids(Clear : Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure ButtonSolveClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -64,12 +68,49 @@ type
 
 var
   MainForm: TMainForm;
+  n, mit, eps : Integer;
 
 implementation
 
 {$R *.dfm}
 
+procedure TMainForm.PrepareStringGrids(Clear : Boolean);
+var
+  i, j : Integer;
+begin
+  for j := 1 to StringGridEquations.ColCount - 2 do
+    StringGridEquations.Cells[j, 0] := 'x(' + IntToStr(j) + ')';
+
+  StringGridEquations.Cells[StringGridEquations.ColCount - 1, 0] := 'Wartoœæ B';
+
+  for j := 1 to StringGridEquations.RowCount - 1 do
+    StringGridEquations.Cells[0, j] := 'Równanie ' + IntToStr(j);
+
+  for j := 1 to StringGridStartVal.ColCount - 1 do
+    StringGridStartVal.Cells[j, 0] := 'x(' + IntToStr(j) + ')';
+
+  StringGridStartVal.Cells[0, 1] := 'Wartoœæ';
+
+  // If set to clear all data in StringGrids
+  if(Clear) then
+  begin
+    for j := 1 to StringGridStartVal.ColCount - 1 do
+      StringGridStartVal.Cells[j, 1] := '';
+
+    for i := 1 to StringGridEquations.RowCount - 1 do
+    begin
+      for j := 1 to StringGridEquations.ColCount - 1 do
+        StringGridEquations.Cells[j, i] := '';
+    end;
+  end;
+end;
+
 { CLEAR RESULTS IN MEMORESULTS }
+procedure TMainForm.ButtonClearClick(Sender: TObject);
+begin
+  PrepareStringGrids(TRUE);
+end;
+
 procedure TMainForm.ButtonClearResultsClick(Sender: TObject);
 begin
   MemoResults.Clear;
@@ -80,6 +121,13 @@ procedure TMainForm.ButtonCopyClick(Sender: TObject);
 begin
   MemoResults.SelectAll;
   MemoResults.CopyToClipboard;
+end;
+
+procedure TMainForm.ButtonSolveClick(Sender: TObject);
+begin
+  n := StrToInt(VarNumber.Text);
+  mit := StrToInt(IterNumber.Text);
+  eps := StrToInt(EditEpsilon.Text);
 end;
 
 { CLOSE APPLICATIONS AS OPTION IN MENU }
@@ -115,6 +163,11 @@ begin
     ExampleNumber.Text := '1';
 end;
 
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  PrepareStringGrids(FALSE);
+end;
+
 procedure TMainForm.HelpOptionClick(Sender: TObject);
 begin
   //
@@ -142,14 +195,15 @@ begin
     VarNumber.Text := '2';
 
   ResizeGrids(StrToInt(VarNumber.Text));
+  PrepareStringGrids(FALSE);
 end;
 
 procedure TMainForm.ResizeGrids(value : Integer);
 begin
-  DrawGridEquations.ColCount := value + 2;
-  DrawGridEquations.RowCount := value + 1;
+  StringGridEquations.ColCount := value + 2;
+  StringGridEquations.RowCount := value + 1;
 
-  DrawGridStartVal.ColCount := value + 1;
+  StringGridStartVal.ColCount := value + 1;
 end;
 
 end.

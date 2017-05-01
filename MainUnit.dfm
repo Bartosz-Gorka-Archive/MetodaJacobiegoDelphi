@@ -15,6 +15,7 @@ object MainForm: TMainForm
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poDesigned
+  OnCreate = FormCreate
   DesignSize = (
     769
     419)
@@ -29,7 +30,6 @@ object MainForm: TMainForm
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 0
-    ExplicitHeight = 401
     object Splitter1: TSplitter
       Left = 209
       Top = 1
@@ -57,9 +57,6 @@ object MainForm: TMainForm
       Caption = 'Panel2'
       ShowCaption = False
       TabOrder = 0
-      ExplicitLeft = 292
-      ExplicitWidth = 213
-      ExplicitHeight = 399
       object LabelEquations: TLabel
         Left = 98
         Top = 0
@@ -86,7 +83,7 @@ object MainForm: TMainForm
         Font.Style = [fsBold]
         ParentFont = False
       end
-      object DrawGridEquations: TDrawGrid
+      object StringGridEquations: TStringGrid
         Left = 3
         Top = 35
         Width = 362
@@ -96,7 +93,7 @@ object MainForm: TMainForm
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
         TabOrder = 0
       end
-      object DrawGridStartVal: TDrawGrid
+      object StringGridStartVal: TStringGrid
         Left = 3
         Top = 346
         Width = 362
@@ -117,8 +114,6 @@ object MainForm: TMainForm
       Constraints.MinWidth = 30
       ShowCaption = False
       TabOrder = 1
-      ExplicitLeft = -23
-      ExplicitHeight = 399
       object LabelSetting: TLabel
         Left = 26
         Top = 0
@@ -241,6 +236,7 @@ object MainForm: TMainForm
         Height = 25
         Caption = '&Oblicz'
         TabOrder = 1
+        OnClick = ButtonSolveClick
       end
       object UpDownVarNumber: TUpDown
         Left = 169
@@ -311,6 +307,7 @@ object MainForm: TMainForm
         Height = 25
         Caption = '&Wykonaj'
         TabOrder = 8
+        OnClick = ButtonClearClick
       end
       object ButtonReadExample: TButton
         Left = 8
@@ -363,9 +360,6 @@ object MainForm: TMainForm
       Caption = 'Panel4'
       ShowCaption = False
       TabOrder = 2
-      ExplicitLeft = 584
-      ExplicitTop = 0
-      ExplicitHeight = 401
       object LabelResults: TLabel
         Left = 59
         Top = 0
@@ -384,9 +378,6 @@ object MainForm: TMainForm
         Top = 35
         Width = 185
         Height = 272
-        Lines.Strings = (
-          'Test'
-          'dasda')
         TabOrder = 0
       end
       object ButtonCopy: TButton
