@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType, JacobiEqu, AppInfo;
+  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType,
+  JacobiEqu, AppInfo;
 
 type
   TMainForm = class(TForm)
@@ -55,16 +56,17 @@ type
     procedure ExampleNumberChange(Sender: TObject);
     procedure ButtonCopyClick(Sender: TObject);
     procedure ButtonClearResultsClick(Sender: TObject);
-    procedure ResizeGrids(value : Integer);
+    procedure ResizeGrids(value: Integer);
     procedure ButtonClearClick(Sender: TObject);
-    procedure PrepareStringGrids(Clear : Boolean);
+    procedure PrepareStringGrids(Clear: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure ButtonSolveClick(Sender: TObject);
-    procedure ImportExample(Number : Integer);
+    procedure ImportExample(Number: Integer);
     procedure ButtonReadExampleClick(Sender: TObject);
     procedure WriteExample();
     procedure StoreResults();
     procedure ApplicationClick(Sender: TObject);
+    procedure ReadFromGrids();
   private
     { Private declarations }
   public
@@ -73,17 +75,56 @@ type
 
 var
   MainForm: TMainForm;
-  //AppForm : TApplicationData;
-  n, mit, st, it : Integer;
-  eps : Extended;
-  a : matrix;
-  b, x : vector;
+  n, mit, st, it: Integer;
+  eps: Extended;
+  a: matrix;
+  b, x: vector;
 
 implementation
 
 {$R *.dfm}
 
-procedure TMainForm.ImportExample(Number : Integer);
+procedure TMainForm.ReadFromGrids();
+var
+  i, j: Integer;
+begin
+  n := StrToInt(VarNumber.Text);
+  mit := StrToInt(IterNumber.Text);
+  eps := Exp(-StrToInt(EditEpsilon.Text));
+
+  SetLength(a, n + 1);
+  SetLength(b, n + 1);
+  SetLength(x, n + 1);
+  for i := 0 to n + 1 do
+    SetLength(a[i], n + 1);
+
+  for i := 1 to StringGridStartVal.ColCount - 1 do
+    x[i] := StrToFloat(StringGridStartVal.Cells[i, 1]);
+
+  for i := 1 to StringGridEquations.RowCount - 1 do
+  begin
+    for j := 1 to StringGridEquations.ColCount - 2 do
+      // a[i, j] := StrToFloat(StringGridEquations.Cells[j, i]);
+
+    b[i] := StrToFloat(StringGridEquations.Cells[StringGridEquations.ColCount - 1, i]);
+  end;
+
+  for i := 1 to StringGridEquations.RowCount - 1 do
+    WriteLn(b[i]);
+
+  for i := 1 to StringGridEquations.RowCount - 1 do
+  begin
+    for j := 1 to StringGridEquations.ColCount - 2 do
+      begin
+        Write(i);
+        Write('-');
+        Write(j);
+        WriteLn(a[i, j]);
+      end;
+  end;
+end;
+
+procedure TMainForm.ImportExample(Number: Integer);
 var
   i: Integer;
 begin
@@ -97,14 +138,32 @@ begin
         SetLength(x, n + 1);
         for i := 0 to n + 1 do
           SetLength(a[i], n + 1);
-        a[1, 1] := 0;  a[1, 2] := 0; a[1, 3] := 1; a[1, 4] := 2;
-        a[2, 1] := 2;  a[2, 2] := 1; a[2, 3] := 0; a[2, 4] := 2;
-        a[3, 1] := 7;  a[3, 2] := 3; a[3, 3] := 0; a[3, 4] := 1;
-        a[4, 1] := 0;  a[4, 2] := 5; a[4, 3] := 0; a[4, 4] := 0;
-        b[1] := 1; b[2] := 1; b[3] := 1; b[4] := 1;
+        a[1, 1] := 0;
+        a[1, 2] := 0;
+        a[1, 3] := 1;
+        a[1, 4] := 2;
+        a[2, 1] := 2;
+        a[2, 2] := 1;
+        a[2, 3] := 0;
+        a[2, 4] := 2;
+        a[3, 1] := 7;
+        a[3, 2] := 3;
+        a[3, 3] := 0;
+        a[3, 4] := 1;
+        a[4, 1] := 0;
+        a[4, 2] := 5;
+        a[4, 3] := 0;
+        a[4, 4] := 0;
+        b[1] := 1;
+        b[2] := 1;
+        b[3] := 1;
+        b[4] := 1;
         mit := 100;
-        eps := exp(-14);
-        x[1] := 0; x[2] := 0; x[3] := 0; x[4] := 0;
+        eps := Exp(-14);
+        x[1] := 0;
+        x[2] := 0;
+        x[3] := 0;
+        x[4] := 0;
       end;
     2:
       begin
@@ -114,14 +173,32 @@ begin
         SetLength(x, n + 1);
         for i := 0 to n + 1 do
           SetLength(a[i], n + 1);
-        a[1, 1] := -12.235;  a[1, 2] := 1.229; a[1, 3] := 0.5597; a[1, 4] := 0;
-        a[2, 1] := 1.229;  a[2, 2] := -6.78; a[2, 3] := 0.765; a[2, 4] := 0;
-        a[3, 1] := 0.5597;  a[3, 2] := 0.765; a[3, 3] := 91.0096; a[3, 4] := 2;
-        a[4, 1] := 0;  a[4, 2] := 0; a[4, 3] := -2; a[4, 4] := 5.5;
-        b[1] := 0.956; b[2] := 51.5603; b[3] := 2; b[4] := 5.8;
+        a[1, 1] := -12.235;
+        a[1, 2] := 1.229;
+        a[1, 3] := 0.5597;
+        a[1, 4] := 0;
+        a[2, 1] := 1.229;
+        a[2, 2] := -6.78;
+        a[2, 3] := 0.765;
+        a[2, 4] := 0;
+        a[3, 1] := 0.5597;
+        a[3, 2] := 0.765;
+        a[3, 3] := 91.0096;
+        a[3, 4] := 2;
+        a[4, 1] := 0;
+        a[4, 2] := 0;
+        a[4, 3] := -2;
+        a[4, 4] := 5.5;
+        b[1] := 0.956;
+        b[2] := 51.5603;
+        b[3] := 2;
+        b[4] := 5.8;
         mit := 10;
-        eps := exp(-14);
-        x[1] := 2; x[2] := 0.75; x[3] := -1; x[4] := 0.9;
+        eps := Exp(-14);
+        x[1] := 2;
+        x[2] := 0.75;
+        x[3] := -1;
+        x[4] := 0.9;
       end;
     3:
       begin
@@ -131,19 +208,37 @@ begin
         SetLength(x, n + 1);
         for i := 0 to n + 1 do
           SetLength(a[i], n + 1);
-        a[1, 1] := -12.235;  a[1, 2] := 1.229; a[1, 3] := 0.5597; a[1, 4] := 0;
-        a[2, 1] := 1.229;  a[2, 2] := -6.78; a[2, 3] := 0.765; a[2, 4] := 0;
-        a[3, 1] := 0.5597;  a[3, 2] := 0.765; a[3, 3] := 91.0096; a[3, 4] := 2;
-        a[4, 1] := 0;  a[4, 2] := 0; a[4, 3] := -2; a[4, 4] := 5.5;
-        b[1] := 0.956; b[2] := 51.5603; b[3] := 2; b[4] := 5.8;
+        a[1, 1] := -12.235;
+        a[1, 2] := 1.229;
+        a[1, 3] := 0.5597;
+        a[1, 4] := 0;
+        a[2, 1] := 1.229;
+        a[2, 2] := -6.78;
+        a[2, 3] := 0.765;
+        a[2, 4] := 0;
+        a[3, 1] := 0.5597;
+        a[3, 2] := 0.765;
+        a[3, 3] := 91.0096;
+        a[3, 4] := 2;
+        a[4, 1] := 0;
+        a[4, 2] := 0;
+        a[4, 3] := -2;
+        a[4, 4] := 5.5;
+        b[1] := 0.956;
+        b[2] := 51.5603;
+        b[3] := 2;
+        b[4] := 5.8;
         mit := 100;
-        eps := exp(-14);
-        x[1] := 2; x[2] := 0.75; x[3] := -1; x[4] := 0.9;
+        eps := Exp(-14);
+        x[1] := 2;
+        x[2] := 0.75;
+        x[3] := -1;
+        x[4] := 0.9;
       end;
-    else
-      begin
-        ShowMessage('B³¹d przy wczytywaniu przyk³adu!');
-      end;
+  else
+    begin
+      ShowMessage('B³¹d przy wczytywaniu przyk³adu!');
+    end;
   end;
 
   WriteLn(IntToStr(n));
@@ -152,26 +247,27 @@ end;
 
 procedure TMainForm.WriteExample();
 var
-  i, j : Integer;
+  i, j: Integer;
 begin
   EditEpsilon.Text := IntToStr(14);
   IterNumber.Text := IntToStr(mit);
   VarNumber.Text := IntToStr(n);
 
   for j := 1 to StringGridStartVal.ColCount - 1 do
-      StringGridStartVal.Cells[j, 1] := FloatToStr(x[j]);
+    StringGridStartVal.Cells[j, 1] := FloatToStr(x[j]);
 
-    for i := 1 to StringGridEquations.RowCount - 1 do
-    begin
-      for j := 1 to StringGridEquations.ColCount - 2 do
-        StringGridEquations.Cells[j, i] := FloatToStr(a[i, j]);
-      StringGridEquations.Cells[StringGridEquations.ColCount - 1, i] := FloatToStr(b[i]);
-    end;
+  for i := 1 to StringGridEquations.RowCount - 1 do
+  begin
+    for j := 1 to StringGridEquations.ColCount - 2 do
+      StringGridEquations.Cells[j, i] := FloatToStr(a[i, j]);
+    StringGridEquations.Cells[StringGridEquations.ColCount - 1, i] :=
+      FloatToStr(b[i]);
+  end;
 end;
 
-procedure TMainForm.PrepareStringGrids(Clear : Boolean);
+procedure TMainForm.PrepareStringGrids(Clear: Boolean);
 var
-  i, j : Integer;
+  i, j: Integer;
 begin
   for j := 1 to StringGridEquations.ColCount - 2 do
     StringGridEquations.Cells[j, 0] := 'x[' + IntToStr(j) + ']';
@@ -187,7 +283,7 @@ begin
   StringGridStartVal.Cells[0, 1] := 'Wartoœæ';
 
   // If set to clear all data in StringGrids
-  if(Clear) then
+  if (Clear) then
   begin
     for j := 1 to StringGridStartVal.ColCount - 1 do
       StringGridStartVal.Cells[j, 1] := '';
@@ -230,12 +326,10 @@ begin
 end;
 
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
+var
+  i: Integer;
 begin
-  n := StrToInt(VarNumber.Text);
-  mit := StrToInt(IterNumber.Text);
-  eps := Exp(-StrToInt(EditEpsilon.Text));
-
-  // Odczyt pól z Gridów do tablic
+  ReadFromGrids();
 
   Jacobi(n, a, b, mit, eps, x, it, st);
 
@@ -244,10 +338,11 @@ end;
 
 procedure TMainForm.StoreResults();
 var
-  i : Integer;
+  i: Integer;
 begin
   MemoResults.Clear();
-  MemoResults.Lines.Add('Wynik obliczeñ dla wprowadzonych danych uk³adu równañ:');
+  MemoResults.Lines.Add
+    ('Wynik obliczeñ dla wprowadzonych danych uk³adu równañ:');
   MemoResults.Lines.Add('');
   case st of
     0:
@@ -256,7 +351,8 @@ begin
       end;
     1:
       begin
-        MemoResults.Lines.Add('B£¥D - Liczba zmiennych nie mo¿e byæ mniejsza od 1.');
+        MemoResults.Lines.Add
+          ('B£¥D - Liczba zmiennych nie mo¿e byæ mniejsza od 1.');
       end;
     2:
       begin
@@ -265,16 +361,16 @@ begin
     3:
       begin
         MemoResults.Lines.Add('CZÊŒCIOWY B£¥D - Wymagana dok³adnoœæ rozwi¹zania'
-          + ' niezosta³a osi¹gniêta po ' + Format('%d', [mit]) + ' iteracjach.');
+          + ' niezosta³a osi¹gniêta po ' + Format('%d', [mit]) +
+          ' iteracjach.');
       end;
   end;
 
-  WriteLn(eps);
-  if(st = 0) OR (st = 3) then
+  if (st = 0) OR (st = 3) then
   begin
-     for i := 1 to n do
-        MemoResults.Lines.Add('x[' + IntToStr(i) + '] = ' + Format('%e', [x[i]]));
-     MemoResults.Lines.Add('Liczba iteracji = ' + Format('%d', [it]));
+    for i := 1 to n do
+      MemoResults.Lines.Add('x[' + IntToStr(i) + '] = ' + Format('%e', [x[i]]));
+    MemoResults.Lines.Add('Liczba iteracji = ' + Format('%d', [it]));
   end;
 end;
 
@@ -288,11 +384,11 @@ end;
 { OPEN HELP FORM WITH INFORMATIONS HOW TO USE A PROGRAM }
 procedure TMainForm.EditEpsilonChange(Sender: TObject);
 begin
-  if(EditEpsilon.Text <> '') then
+  if (EditEpsilon.Text <> '') then
   begin
-    if(StrToInt(EditEpsilon.Text) < 1) then
+    if (StrToInt(EditEpsilon.Text) < 1) then
       EditEpsilon.Text := '1';
-    if(StrToInt(EditEpsilon.Text) > 16) then
+    if (StrToInt(EditEpsilon.Text) > 16) then
       EditEpsilon.Text := '16';
   end
   else
@@ -301,11 +397,11 @@ end;
 
 procedure TMainForm.ExampleNumberChange(Sender: TObject);
 begin
-  if(ExampleNumber.Text <> '') then
+  if (ExampleNumber.Text <> '') then
   begin
-    if(StrToInt(ExampleNumber.Text) < 1) then
+    if (StrToInt(ExampleNumber.Text) < 1) then
       ExampleNumber.Text := '1';
-    if(StrToInt(ExampleNumber.Text) > 3) then
+    if (StrToInt(ExampleNumber.Text) > 3) then
       ExampleNumber.Text := '3';
   end
   else
@@ -324,9 +420,9 @@ end;
 
 procedure TMainForm.IterNumberChange(Sender: TObject);
 begin
-  if(IterNumber.Text <> '') then
+  if (IterNumber.Text <> '') then
   begin
-    if(StrToInt(IterNumber.Text) < 1) then
+    if (StrToInt(IterNumber.Text) < 1) then
       IterNumber.Text := '1';
   end
   else
@@ -335,9 +431,9 @@ end;
 
 procedure TMainForm.VarNumberChange(Sender: TObject);
 begin
-  if(VarNumber.Text <> '') then
+  if (VarNumber.Text <> '') then
   begin
-    if(StrToInt(VarNumber.Text) < 2) then
+    if (StrToInt(VarNumber.Text) < 2) then
       VarNumber.Text := '2';
   end
   else
@@ -347,7 +443,7 @@ begin
   PrepareStringGrids(FALSE);
 end;
 
-procedure TMainForm.ResizeGrids(value : Integer);
+procedure TMainForm.ResizeGrids(value: Integer);
 begin
   StringGridEquations.ColCount := value + 2;
   StringGridEquations.RowCount := value + 1;

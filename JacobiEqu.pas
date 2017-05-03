@@ -151,16 +151,18 @@ begin
           end
         end;
 
-        Write('eps ');
+        Write('eps = ');
         WriteLn(eps);
-        Write('mit ');
+        Write('mit = ');
         WriteLn(mit);
         WriteLn(x[0]);
          WriteLn(x[1]);
           WriteLn(x[2]);
            WriteLn(x[3]);
             WriteLn(x[4]);
+        Write('st = ');
         WriteLn(st);
+        Write('it = ');
         WriteLn(it);
       end;
 
