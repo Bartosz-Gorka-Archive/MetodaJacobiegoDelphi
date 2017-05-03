@@ -1,5 +1,7 @@
 unit MainUnit;
 
+{$N+,E-}
+
 interface
 
 uses
@@ -104,7 +106,7 @@ begin
   for i := 1 to StringGridEquations.RowCount - 1 do
   begin
     for j := 1 to StringGridEquations.ColCount - 2 do
-      // a[i, j] := StrToFloat(StringGridEquations.Cells[j, i]);
+      a[i, j] := StrToFloat(StringGridEquations.Cells[j, i]);
 
     b[i] := StrToFloat(StringGridEquations.Cells[StringGridEquations.ColCount - 1, i]);
   end;
@@ -388,8 +390,8 @@ begin
   begin
     if (StrToInt(EditEpsilon.Text) < 1) then
       EditEpsilon.Text := '1';
-    if (StrToInt(EditEpsilon.Text) > 16) then
-      EditEpsilon.Text := '16';
+    if (StrToInt(EditEpsilon.Text) > 20) then
+      EditEpsilon.Text := '20';
   end
   else
     EditEpsilon.Text := '14';
