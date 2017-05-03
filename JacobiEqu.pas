@@ -3,7 +3,8 @@ unit JacobiEqu;
 interface
 
 uses
-  MyVarType;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType;
 
 procedure Jacobi(n: Integer; var a: matrix; var b: vector; mit: Integer;
   eps: Extended; var x: vector; var it, st: Integer);
@@ -57,6 +58,7 @@ begin
     st := 1
   else
   begin
+    SetLength(x1, n + 1);
     st := 0;
     cond := true;
     for k := 1 to n do
@@ -147,7 +149,21 @@ begin
             end
             until (st = 3) or cond
           end
-        end
+        end;
+
+        Write('eps = ');
+        WriteLn(eps);
+        Write('mit = ');
+        WriteLn(mit);
+        WriteLn(x[0]);
+         WriteLn(x[1]);
+          WriteLn(x[2]);
+           WriteLn(x[3]);
+            WriteLn(x[4]);
+        Write('st = ');
+        WriteLn(st);
+        Write('it = ');
+        WriteLn(it);
       end;
 
 end.
