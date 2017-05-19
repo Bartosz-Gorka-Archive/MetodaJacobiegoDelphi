@@ -231,7 +231,7 @@ object MainForm: TMainForm
       end
       object ButtonSolve: TButton
         Left = 8
-        Top = 210
+        Top = 206
         Width = 177
         Height = 25
         Caption = '&Oblicz'

@@ -1,6 +1,6 @@
 object ApplicationData: TApplicationData
-  Left = 0
-  Top = 0
+  Left = 455
+  Top = 162
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Dane aplikacji'
@@ -17,6 +17,7 @@ object ApplicationData: TApplicationData
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesigned
   PixelsPerInch = 96
   TextHeight = 13
   object MemoAppData: TMemo
