@@ -4,26 +4,29 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyIntervalType, IntervalArithmetic32and64;
+  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyIntervalType,
+  IntervalArithmetic32and64;
 
-procedure JacobiInterval(n: Integer; var a: intervalMatrix; var b: intervalVector; mit: Integer;
-  eps: Extended; var x: intervalVector; var it, st: Integer);
+procedure JacobiInterval(n: Integer; var a: intervalMatrix;
+  var b: intervalVector; mit: Integer; eps: Extended; var x: intervalVector;
+  var it, st: Integer);
 
 implementation
 
-procedure JacobiInterval(n: Integer; var a: intervalMatrix; var b: intervalVector; mit: Integer;
-  eps: Extended; var x: intervalVector; var it, st: Integer);
+procedure JacobiInterval(n: Integer; var a: intervalMatrix;
+  var b: intervalVector; mit: Integer; eps: Extended; var x: intervalVector;
+  var it, st: Integer);
 { --------------------------------------------------------------------------- }
-{ }
-{ The procedure Jacobi solves a system of linear equations by Jacobi's        }
-{ iterative method.                                                           }
-{ Data:                                                                       }
-{ n   - number of equations = number of unknowns,                             }
-{ a   - a two-dimensional array containing elements of the matrix of the      }
-{ system (changed on exit),                                                   }
-{ b   - a one-dimensional array containing free terms of the system           }
-{ (changed on exit),                                                          }
-{ mit - maximum number of iterations in Jacobi's method,                      }
+{}
+{ The procedure Jacobi solves a system of linear equations by Jacobi's }
+{ iterative method. }
+{ Data: }
+{ n   - number of equations = number of unknowns, }
+{ a   - a two-dimensional array containing elements of the matrix of the }
+{ system (changed on exit), }
+{ b   - a one-dimensional array containing free terms of the system }
+{ (changed on exit), }
+{ mit - maximum number of iterations in Jacobi's method, }
 { eps - relative accuracy of the solution, }
 { x   - an array containing an initial approximation to the solution }
 { (changed on exit). }
@@ -37,6 +40,7 @@ procedure JacobiInterval(n: Integer; var a: intervalMatrix; var b: intervalVecto
 { 2, if the matrix of the system is singular, }
 { 3, if the desired accuracy of the solution is not achieved in }
 { mit iteration steps, }
+{ 4, if division by an interval containing 0. }
 { 0, otherwise. }
 { Note: If st=1 or st=2, then the elements of array x are not }
 { changed on exit. If st=3, then x contains the last }
@@ -132,23 +136,32 @@ begin
               for k := 1 to n do
                 if k <> i then
                   r := r - a[i, k] * x[k];
-              x1[i] := r / a[i, i]
+              if (not containtZero(a[i, i])) then
+                x1[i] := r / a[i, i]
+              else
+              begin
+                st := 4;
+                break;
+              end;
             end;
             cond := true;
             i := 0;
-            repeat
-              i := i + 1;
-              max := iabs(x[i]);
-              r := iabs(x1[i]);
-              if max < r then
-                max := r;
-              if max <> 0 then
-                if iabs(x[i] - x1[i]) / max >= eps then
-                  cond := false until (i = n) or not cond;
-              for i := 1 to n do
-                x[i] := x1[i]
-            end
-            until (st = 3) or cond
+
+            if (st <> 4) then
+              repeat
+                i := i + 1;
+                max := iabs(x[i]);
+                r := iabs(x1[i]);
+                if max < r then
+                  max := r;
+                if max <> 0 then
+                  if iabs(x[i] - x1[i]) / max >= eps then
+                    cond := false until (i = n) or not cond;
+                for i := 1 to n do
+                  x[i] := x1[i]
+              end
+              until (st = 3) or cond
+
           end
         end;
 

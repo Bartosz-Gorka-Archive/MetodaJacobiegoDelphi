@@ -87,8 +87,8 @@ var
   bi, xi: intervalVector;
 
   floatAritmetic: Boolean;
-
   correct: Boolean;
+  const CRLF = #13#10;
 
 implementation
 
@@ -156,19 +156,17 @@ begin
           xi[i].a := StrToFloat(List[0]);
           xi[i].b := StrToFloat(List[1]);
           if (xi[i].a > xi[i].b) then
+          begin
             correct := False;
-        end
-        else
-        begin
-          xi[i].a := 0;
-          xi[i].b := 0;
-          correct := False;
+            break;
+          end;
         end;
       finally
         List.Clear;
       end;
     end;
 
+    if(correct) then
     for i := 1 to StringGridEquations.RowCount - 1 do
     begin
       for j := 1 to StringGridEquations.ColCount - 2 do
@@ -181,13 +179,10 @@ begin
             ai[i, j].a := StrToFloat(List[0]);
             ai[i, j].b := StrToFloat(List[1]);
             if (ai[i, j].a > ai[i, j].b) then
+            begin
               correct := False;
-          end
-          else
-          begin
-            ai[i, j].a := 0;
-            ai[i, j].b := 0;
-            correct := False;
+              break;
+            end;
           end;
         finally
           List.Clear;
@@ -203,13 +198,10 @@ begin
           bi[i].a := StrToFloat(List[0]);
           bi[i].b := StrToFloat(List[1]);
           if (bi[i].a > bi[i].b) then
+          begin
             correct := False;
-        end
-        else
-        begin
-          bi[i].a := 0;
-          bi[i].b := 0;
-          correct := False;
+            break;
+          end;
         end;
       finally
         List.Clear;
@@ -452,7 +444,7 @@ begin
     floatAritmetic := True
   else
     floatAritmetic := False;
-  WriteLn(floatAritmetic);
+
   ReadFromGrids();
 
   if (floatAritmetic) then
@@ -508,8 +500,10 @@ begin
     else
     begin
       for i := 1 to n do
-        MemoResults.Lines.Add('x[' + IntToStr(i) + '] = ' + Format('[%e ; %e ]',
-          [xi[i].a, xi[i].b]));
+      begin
+        MemoResults.Lines.Add('x[' + IntToStr(i) + ']:');
+        MemoResults.Lines.Add(Format('%e%s%e', [xi[i].a, CRLF, xi[i].b]));
+      end;
     end;
     MemoResults.Lines.Add('Liczba iteracji = ' + Format('%d', [it]));
   end;
