@@ -7,7 +7,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType,
-  JacobiEqu, AppInfo, HelpUnit;
+  JacobiEqu, AppInfo, HelpUnit, IntervalArithmetic32and64;
 
 type
   TMainForm = class(TForm)
@@ -328,8 +328,6 @@ begin
 end;
 
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
-var
-  i: Integer;
 begin
   ReadFromGrids();
 
