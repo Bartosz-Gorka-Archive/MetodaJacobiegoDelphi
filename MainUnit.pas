@@ -7,7 +7,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType,
-  JacobiEqu, AppInfo, HelpUnit, IntervalArithmetic32and64;
+  MyIntervalType, IntervalArithmetic32and64,
+  JacobiEqu, AppInfo, HelpUnit;
 
 type
   TMainForm = class(TForm)
@@ -82,6 +83,11 @@ var
   a: matrix;
   b, x: vector;
 
+  ai: intervalMatrix;
+  bi, xi: intervalVector;
+
+  floatAritmetic : Boolean;
+
 implementation
 
 {$R *.dfm}
@@ -108,7 +114,8 @@ begin
     for j := 1 to StringGridEquations.ColCount - 2 do
       a[i, j] := StrToFloat(StringGridEquations.Cells[j, i]);
 
-    b[i] := StrToFloat(StringGridEquations.Cells[StringGridEquations.ColCount - 1, i]);
+    b[i] := StrToFloat(StringGridEquations.Cells
+      [StringGridEquations.ColCount - 1, i]);
   end;
 
   for i := 1 to StringGridEquations.RowCount - 1 do
@@ -117,12 +124,12 @@ begin
   for i := 1 to StringGridEquations.RowCount - 1 do
   begin
     for j := 1 to StringGridEquations.ColCount - 2 do
-      begin
-        Write(i);
-        Write('-');
-        Write(j);
-        WriteLn(a[i, j]);
-      end;
+    begin
+      Write(i);
+      Write('-');
+      Write(j);
+      WriteLn(a[i, j]);
+    end;
   end;
 end;
 
@@ -134,6 +141,7 @@ begin
   case Number of
     1:
       begin
+        floatAritmetic := True;
         n := 4;
         SetLength(a, n + 1);
         SetLength(b, n + 1);
@@ -169,6 +177,7 @@ begin
       end;
     2:
       begin
+        floatAritmetic := True;
         n := 4;
         SetLength(a, n + 1);
         SetLength(b, n + 1);
@@ -204,6 +213,7 @@ begin
       end;
     3:
       begin
+        floatAritmetic := True;
         n := 4;
         SetLength(a, n + 1);
         SetLength(b, n + 1);
@@ -251,6 +261,11 @@ procedure TMainForm.WriteExample();
 var
   i, j: Integer;
 begin
+  if(floatAritmetic) then
+    RadioButtonZmienno.Checked := True
+  else
+    RadioButtonPrzedzialowa.Checked := True;
+
   EditEpsilon.Text := IntToStr(14);
   IterNumber.Text := IntToStr(mit);
   VarNumber.Text := IntToStr(n);
