@@ -7,7 +7,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType,
-  JacobiEqu, AppInfo;
+  JacobiEqu, AppInfo, HelpUnit;
 
 type
   TMainForm = class(TForm)
@@ -417,7 +417,7 @@ end;
 
 procedure TMainForm.HelpOptionClick(Sender: TObject);
 begin
-  //
+  HelpUnit.HelpForm.Show();
 end;
 
 procedure TMainForm.IterNumberChange(Sender: TObject);
