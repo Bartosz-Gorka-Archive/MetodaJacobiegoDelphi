@@ -39,6 +39,7 @@ type
   var
     a, b: Extended;
     class operator Implicit(x: Extended): interval;
+    class operator Implicit(x: Integer): interval;
     class operator Negative(x: interval): interval;
     class operator Positive(x: interval): interval;
     class operator Add(x, y: interval): interval;
@@ -261,8 +262,17 @@ type
       '0.0000000000000004440892098500626161694526672363281250',
       '0.0000000000000002220446049250313080847263336181640625');
 {$ENDIF}
-    class operator interval.Implicit(x: Extended): interval;
 
+class operator interval.Implicit(x: Extended): interval;
+  var
+    s: string;
+  begin
+    Str(x: 26, s);
+    Result.a := left_read(s);
+    Result.b := right_read(s)
+  end { Implicit };
+
+  class operator interval.Implicit(x: Integer): interval;
   var
     s: string;
   begin

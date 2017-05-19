@@ -63,6 +63,7 @@ begin
     cond := true;
     for k := 1 to n do
       x1[k] := 0;
+    WriteLn(x1[1].a);
     repeat
       lz1 := 0;
       khh := 0;
@@ -155,16 +156,12 @@ begin
         WriteLn(eps);
         Write('mit = ');
         WriteLn(mit);
-        Write(x[0].a);
-            WriteLn(x[0].b);
-         Write(x[1].a);
-            WriteLn(x[1].b);
-          Write(x[2].a);
-            WriteLn(x[2].b);
-           Write(x[3].a);
-            WriteLn(x[3].b);
-            Write(x[4].a);
-            WriteLn(x[4].b);
+        for i := 0 to n do
+        begin
+          Write(x[i].a);
+          WriteLn(x[i].b);
+        end;
+
         Write('st = ');
         WriteLn(st);
         Write('it = ');

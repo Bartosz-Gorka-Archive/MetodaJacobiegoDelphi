@@ -104,7 +104,7 @@ begin
   mit := StrToInt(IterNumber.Text);
   eps := Exp(-StrToInt(EditEpsilon.Text));
 
-  if (RadioButtonZmienno.Checked) then
+  if (floatAritmetic) then
   begin
     SetLength(a, n + 1);
     SetLength(b, n + 1);
@@ -215,6 +215,8 @@ begin
         List.Clear;
       end;
     end;
+
+    List.Free;
 
     for i := 1 to StringGridEquations.RowCount - 1 do
     begin
@@ -446,8 +448,14 @@ end;
 
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
 begin
-  ReadFromGrids();
   if (RadioButtonZmienno.Checked) then
+    floatAritmetic := True
+  else
+    floatAritmetic := False;
+  WriteLn(floatAritmetic);
+  ReadFromGrids();
+
+  if (floatAritmetic) then
   begin
     Jacobi(n, a, b, mit, eps, x, it, st);
     StoreResults();
@@ -491,7 +499,7 @@ begin
 
   if (st = 0) OR (st = 3) then
   begin
-    if (RadioButtonZmienno.Checked) then
+    if (floatAritmetic) then
     begin
       for i := 1 to n do
         MemoResults.Lines.Add('x[' + IntToStr(i) + '] = ' +
