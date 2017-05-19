@@ -58,7 +58,7 @@ begin
     st := 1
   else
   begin
-    //SetLength(x1, n + 1);
+    SetLength(x1, n + 1);
     st := 0;
     cond := true;
     for k := 1 to n do
