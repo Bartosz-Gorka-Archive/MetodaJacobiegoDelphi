@@ -8,7 +8,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType,
   MyIntervalType, IntervalArithmetic32and64, JacobiEquInterval,
-  JacobiEqu, AppInfo, HelpUnit;
+  JacobiEqu, AppInfo, HelpUnit, RegularExpressions;
 
 type
   TMainForm = class(TForm)
@@ -70,6 +70,8 @@ type
     procedure StoreResults();
     procedure ApplicationClick(Sender: TObject);
     procedure ReadFromGrids();
+    procedure ClearData();
+    procedure RemoveNonNumbersASCIIFromStart(var Str: AnsiString);
   private
     { Private declarations }
   public
@@ -88,15 +90,39 @@ var
 
   floatAritmetic: Boolean;
   correct: Boolean;
-  const CRLF = #13#10;
+
+const
+  CRLF = #13#10;
+const
+  RemoveChar = ['a'..'z', '=', '\'];
 
 implementation
 
 {$R *.dfm}
 
+procedure TMainForm.RemoveNonNumbersASCIIFromStart(var Str: AnsiString);
+const
+  ALLOW_CHAR = ['0'..'9', '-', ';', ',', '.'];
+var
+  i: Integer;
+  firstIndex: integer;
+begin
+  firstIndex := 0;
+  for i := 1 to length(Str) do
+    if Str[i] in ALLOW_CHAR then
+    begin
+      firstIndex := i;
+      break;
+    end;
+  if firstIndex > 0 then
+    Delete(Str, 1, firstIndex - 1)
+  else
+    Str := '';
+end;
+
 procedure TMainForm.ReadFromGrids();
 var
-  i, j: Integer;
+  I, j: Integer;
   str: String;
   List: TStringList;
 begin
@@ -109,29 +135,37 @@ begin
     SetLength(a, n + 1);
     SetLength(b, n + 1);
     SetLength(x, n + 1);
-    for i := 0 to n + 1 do
-      SetLength(a[i], n + 1);
+    for I := 0 to n + 1 do
+      SetLength(a[I], n + 1);
 
-    for i := 1 to StringGridStartVal.ColCount - 1 do
-      x[i] := StrToFloat(StringGridStartVal.Cells[i, 1]);
-
-    for i := 1 to StringGridEquations.RowCount - 1 do
+    for I := 1 to StringGridStartVal.ColCount - 1 do
     begin
-      for j := 1 to StringGridEquations.ColCount - 2 do
-        a[i, j] := StrToFloat(StringGridEquations.Cells[j, i]);
-
-      b[i] := StrToFloat(StringGridEquations.Cells
-        [StringGridEquations.ColCount - 1, i]);
+      str := StringGridStartVal.Cells[I, 1];
+      x[I] := StrToFloat(str);
     end;
 
-    for i := 1 to StringGridEquations.RowCount - 1 do
+    for I := 1 to StringGridEquations.RowCount - 1 do
     begin
       for j := 1 to StringGridEquations.ColCount - 2 do
       begin
-        Write(i);
+        str := StringGridEquations.Cells[j, I];
+        a[I, j] := StrToFloat(str);
+      end;
+
+
+      str := StringGridEquations.Cells[StringGridEquations.ColCount - 1, I];
+      //str := ReplaceAll(str, RemoveChar, EmptyChar, TRUE);
+      b[I] := StrToFloat(str);
+    end;
+
+    for I := 1 to StringGridEquations.RowCount - 1 do
+    begin
+      for j := 1 to StringGridEquations.ColCount - 2 do
+      begin
+        Write(I);
         Write('-');
         Write(j);
-        WriteLn(a[i, j]);
+        WriteLn(a[I, j]);
       end;
     end;
   end
@@ -143,19 +177,19 @@ begin
     SetLength(ai, n + 1);
     SetLength(bi, n + 1);
     SetLength(xi, n + 1);
-    for i := 0 to n + 1 do
-      SetLength(ai[i], n + 1);
+    for I := 0 to n + 1 do
+      SetLength(ai[I], n + 1);
 
-    for i := 1 to StringGridStartVal.ColCount - 1 do
+    for I := 1 to StringGridStartVal.ColCount - 1 do
     begin
       try
         List.LineBreak := ';';
-        List.Text := StringGridStartVal.Cells[i, 1];
+        List.Text := StringGridStartVal.Cells[I, 1];
         if (List.Count = 2) then
         begin
-          xi[i].a := StrToFloat(List[0]);
-          xi[i].b := StrToFloat(List[1]);
-          if (xi[i].a > xi[i].b) then
+          xi[I].a := StrToFloat(List[0]);
+          xi[I].b := StrToFloat(List[1]);
+          if (xi[I].a > xi[I].b) then
           begin
             correct := False;
             break;
@@ -166,19 +200,38 @@ begin
       end;
     end;
 
-    if(correct) then
-    for i := 1 to StringGridEquations.RowCount - 1 do
-    begin
-      for j := 1 to StringGridEquations.ColCount - 2 do
+    if (correct) then
+      for I := 1 to StringGridEquations.RowCount - 1 do
       begin
+        for j := 1 to StringGridEquations.ColCount - 2 do
+        begin
+          try
+            List.LineBreak := ';';
+            List.Text := StringGridEquations.Cells[j, I];
+            if (List.Count = 2) then
+            begin
+              ai[I, j].a := StrToFloat(List[0]);
+              ai[I, j].b := StrToFloat(List[1]);
+              if (ai[I, j].a > ai[I, j].b) then
+              begin
+                correct := False;
+                break;
+              end;
+            end;
+          finally
+            List.Clear;
+          end;
+        end;
+
         try
           List.LineBreak := ';';
-          List.Text := StringGridEquations.Cells[j, i];
+          List.Text := StringGridEquations.Cells
+            [StringGridEquations.ColCount - 1, I];
           if (List.Count = 2) then
           begin
-            ai[i, j].a := StrToFloat(List[0]);
-            ai[i, j].b := StrToFloat(List[1]);
-            if (ai[i, j].a > ai[i, j].b) then
+            bi[I].a := StrToFloat(List[0]);
+            bi[I].b := StrToFloat(List[1]);
+            if (bi[I].a > bi[I].b) then
             begin
               correct := False;
               break;
@@ -189,36 +242,17 @@ begin
         end;
       end;
 
-      try
-        List.LineBreak := ';';
-        List.Text := StringGridEquations.Cells
-          [StringGridEquations.ColCount - 1, i];
-        if (List.Count = 2) then
-        begin
-          bi[i].a := StrToFloat(List[0]);
-          bi[i].b := StrToFloat(List[1]);
-          if (bi[i].a > bi[i].b) then
-          begin
-            correct := False;
-            break;
-          end;
-        end;
-      finally
-        List.Clear;
-      end;
-    end;
-
     List.Free;
 
-    for i := 1 to StringGridEquations.RowCount - 1 do
+    for I := 1 to StringGridEquations.RowCount - 1 do
     begin
       for j := 1 to StringGridEquations.ColCount - 2 do
       begin
-        Write(i);
+        Write(I);
         Write('-');
         Write(j);
-        Write(ai[i, j].a);
-        WriteLn(ai[i, j].b);
+        Write(ai[I, j].a);
+        WriteLn(ai[I, j].b);
       end;
     end;
 
@@ -231,7 +265,7 @@ end;
 
 procedure TMainForm.ImportExample(Number: Integer);
 var
-  i: Integer;
+  I: Integer;
 begin
   // Przyk³ad 1
   case Number of
@@ -242,8 +276,8 @@ begin
         SetLength(a, n + 1);
         SetLength(b, n + 1);
         SetLength(x, n + 1);
-        for i := 0 to n + 1 do
-          SetLength(a[i], n + 1);
+        for I := 0 to n + 1 do
+          SetLength(a[I], n + 1);
         a[1, 1] := 0;
         a[1, 2] := 0;
         a[1, 3] := 1;
@@ -278,8 +312,8 @@ begin
         SetLength(a, n + 1);
         SetLength(b, n + 1);
         SetLength(x, n + 1);
-        for i := 0 to n + 1 do
-          SetLength(a[i], n + 1);
+        for I := 0 to n + 1 do
+          SetLength(a[I], n + 1);
         a[1, 1] := -12.235;
         a[1, 2] := 1.229;
         a[1, 3] := 0.5597;
@@ -314,8 +348,8 @@ begin
         SetLength(a, n + 1);
         SetLength(b, n + 1);
         SetLength(x, n + 1);
-        for i := 0 to n + 1 do
-          SetLength(a[i], n + 1);
+        for I := 0 to n + 1 do
+          SetLength(a[I], n + 1);
         a[1, 1] := -12.235;
         a[1, 2] := 1.229;
         a[1, 3] := 0.5597;
@@ -355,7 +389,7 @@ end;
 
 procedure TMainForm.WriteExample();
 var
-  i, j: Integer;
+  I, j: Integer;
 begin
   if (floatAritmetic) then
     RadioButtonZmienno.Checked := True
@@ -369,18 +403,18 @@ begin
   for j := 1 to StringGridStartVal.ColCount - 1 do
     StringGridStartVal.Cells[j, 1] := FloatToStr(x[j]);
 
-  for i := 1 to StringGridEquations.RowCount - 1 do
+  for I := 1 to StringGridEquations.RowCount - 1 do
   begin
     for j := 1 to StringGridEquations.ColCount - 2 do
-      StringGridEquations.Cells[j, i] := FloatToStr(a[i, j]);
-    StringGridEquations.Cells[StringGridEquations.ColCount - 1, i] :=
-      FloatToStr(b[i]);
+      StringGridEquations.Cells[j, I] := FloatToStr(a[I, j]);
+    StringGridEquations.Cells[StringGridEquations.ColCount - 1, I] :=
+      FloatToStr(b[I]);
   end;
 end;
 
 procedure TMainForm.PrepareStringGrids(Clear: Boolean);
 var
-  i, j: Integer;
+  I, j: Integer;
 begin
   for j := 1 to StringGridEquations.ColCount - 2 do
     StringGridEquations.Cells[j, 0] := 'x[' + IntToStr(j) + ']';
@@ -401,10 +435,10 @@ begin
     for j := 1 to StringGridStartVal.ColCount - 1 do
       StringGridStartVal.Cells[j, 1] := '';
 
-    for i := 1 to StringGridEquations.RowCount - 1 do
+    for I := 1 to StringGridEquations.RowCount - 1 do
     begin
       for j := 1 to StringGridEquations.ColCount - 1 do
-        StringGridEquations.Cells[j, i] := '';
+        StringGridEquations.Cells[j, I] := '';
     end;
   end;
 end;
@@ -433,9 +467,16 @@ begin
 end;
 
 procedure TMainForm.ButtonReadExampleClick(Sender: TObject);
+var
+  Str : AnsiString;
 begin
   ImportExample(StrToInt(ExampleNumber.Text));
   WriteExample();
+
+  Str := 'a-908asd¹œæ_asd=';
+  WriteLn(Str);
+  Str := TRegEx.Replace(Str, '^[+-]?[0-9]+', '');
+  WriteLn(Str);
 end;
 
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
@@ -457,11 +498,25 @@ begin
     JacobiInterval(n, ai, bi, mit, eps, xi, it, st);
     StoreResults();
   end;
+
+  ClearData();
+end;
+
+procedure TMainForm.ClearData();
+var
+  I: Integer;
+begin
+  SetLength(a, 0);
+  SetLength(b, 0);
+  SetLength(x, 0);
+  SetLength(ai, 0);
+  SetLength(bi, 0);
+  SetLength(xi, 0);
 end;
 
 procedure TMainForm.StoreResults();
 var
-  i: Integer;
+  I: Integer;
 begin
   MemoResults.Clear();
   MemoResults.Lines.Add
@@ -493,16 +548,16 @@ begin
   begin
     if (floatAritmetic) then
     begin
-      for i := 1 to n do
-        MemoResults.Lines.Add('x[' + IntToStr(i) + '] = ' +
-          Format('%e', [x[i]]));
+      for I := 1 to n do
+        MemoResults.Lines.Add('x[' + IntToStr(I) + '] = ' +
+          Format('%e', [x[I]]));
     end
     else
     begin
-      for i := 1 to n do
+      for I := 1 to n do
       begin
-        MemoResults.Lines.Add('x[' + IntToStr(i) + ']:');
-        MemoResults.Lines.Add(Format('%e%s%e', [xi[i].a, CRLF, xi[i].b]));
+        MemoResults.Lines.Add('x[' + IntToStr(I) + ']:');
+        MemoResults.Lines.Add(Format('%e%s%e', [xi[I].a, CRLF, xi[I].b]));
       end;
     end;
     MemoResults.Lines.Add('Liczba iteracji = ' + Format('%d', [it]));

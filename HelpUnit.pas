@@ -4,10 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs;
+  Dialogs, ExtCtrls, pngimage, StdCtrls;
 
 type
   THelpForm = class(TForm)
+    ImageHelp: TImage;
+    LabelHelp: TLabel;
   private
     { Private declarations }
   public
