@@ -481,6 +481,9 @@ end;
 
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
 begin
+  ButtonSolve.Enabled := False;
+  ButtonSolve.Caption := 'Liczê...';
+
   if (RadioButtonZmienno.Checked) then
     floatAritmetic := True
   else
@@ -500,6 +503,8 @@ begin
   end;
 
   ClearData();
+  ButtonSolve.Enabled := True;
+  ButtonSolve.Caption := '&Oblicz';
 end;
 
 procedure TMainForm.ClearData();

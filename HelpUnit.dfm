@@ -1,11 +1,11 @@
 object HelpForm: THelpForm
-  Left = 439
-  Top = 165
+  Left = 299
+  Top = 15
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Pomoc'
-  ClientHeight = 745
-  ClientWidth = 816
+  ClientHeight = 693
+  ClientWidth = 790
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,9 +17,9 @@ object HelpForm: THelpForm
   PixelsPerInch = 96
   TextHeight = 13
   object ImageHelp: TImage
-    Left = 16
-    Top = 43
-    Width = 777
+    Left = 8
+    Top = 8
+    Width = 769
     Height = 441
     Picture.Data = {
       0954506E67496D61676589504E470D0A1A0A0000000D49484452000002FE0000
@@ -1330,17 +1330,382 @@ object HelpForm: THelpForm
       28BF7AD9FED9DDB99C90A606C59F10420821841013F0FF014BDDF5613B48F249
       0000000049454E44AE426082}
   end
-  object LabelHelp: TLabel
-    Left = 8
-    Top = 8
-    Width = 162
-    Height = 29
-    Caption = 'Rzut aplikacji'
+  object Label1: TLabel
+    Left = 21
+    Top = 453
+    Width = 15
+    Height = 21
+    Caption = '1.'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -24
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 21
+    Top = 473
+    Width = 15
+    Height = 21
+    Caption = '2.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 21
+    Top = 492
+    Width = 15
+    Height = 21
+    Caption = '3.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 21
+    Top = 512
+    Width = 15
+    Height = 21
+    Caption = '4.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label5: TLabel
+    Left = 21
+    Top = 530
+    Width = 15
+    Height = 21
+    Caption = '5.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label6: TLabel
+    Left = 21
+    Top = 546
+    Width = 15
+    Height = 21
+    Caption = '6.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label7: TLabel
+    Left = 21
+    Top = 562
+    Width = 15
+    Height = 21
+    Caption = '7.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label8: TLabel
+    Left = 21
+    Top = 578
+    Width = 15
+    Height = 21
+    Caption = '8.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label9: TLabel
+    Left = 11
+    Top = 609
+    Width = 25
+    Height = 21
+    Caption = '10.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label10: TLabel
+    Left = 11
+    Top = 623
+    Width = 25
+    Height = 21
+    Caption = '11.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label11: TLabel
+    Left = 21
+    Top = 594
+    Width = 15
+    Height = 21
+    Caption = '9.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label12: TLabel
+    Left = 44
+    Top = 457
+    Width = 514
+    Height = 16
+    Caption = 
+      'Menu g'#243'rne aplikacji. Kolejno dane o aplikacji, wy'#347'wietlenie okn' +
+      'a pomocy i zamkni'#281'cie aplikacji.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label13: TLabel
+    Left = 44
+    Top = 477
+    Width = 215
+    Height = 16
+    Caption = 'Wyb'#243'r liczby zmiennych (od 2 do 999).'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label14: TLabel
+    Left = 44
+    Top = 496
+    Width = 273
+    Height = 16
+    Caption = 'Liczba iteracji jak'#261' mo'#380'na wykona'#263' (od 1 do 999).'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label15: TLabel
+    Left = 44
+    Top = 516
+    Width = 416
+    Height = 16
+    Caption = 
+      'Wyk'#322'adnik pot'#281'gi - przybli'#380'enie do osi'#261'gni'#281'cia. Od 1*10 ^ -1 do ' +
+      '1*10 ^ -20.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label16: TLabel
+    Left = 44
+    Top = 534
+    Width = 401
+    Height = 16
+    Caption = 
+      'Arytmetyka pracy programu - wp'#322'ywa na format wprowadzanych danyc' +
+      'h.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label17: TLabel
+    Left = 44
+    Top = 550
+    Width = 306
+    Height = 16
+    Caption = 'Przycisk startuj'#261'cy proces rozwi'#261'zywania uk'#322'adu r'#243'wna'#324'.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label18: TLabel
+    Left = 44
+    Top = 566
+    Width = 347
+    Height = 16
+    Caption = 'Przycisk umo'#380'liwiaj'#261'cy wyczyszczenie wszystkich p'#243'l w tabelach.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label19: TLabel
+    Left = 44
+    Top = 582
+    Width = 500
+    Height = 16
+    Caption = 
+      'Wyb'#243'r przyk'#322'adu wgranego do pami'#281'ci jako przyk'#322'adu dzia'#322'ania apl' +
+      'ikacji (warto'#347#263' od 1 do 7).'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label20: TLabel
+    Left = 44
+    Top = 598
+    Width = 432
+    Height = 16
+    Caption = 
+      'Przycisk wprowadzenia przyk'#322'adowych danych z wybranego w pkt 8. ' +
+      'przyk'#322'adu.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label21: TLabel
+    Left = 44
+    Top = 613
+    Width = 252
+    Height = 16
+    Caption = 'Uk'#322'ad r'#243'wna'#324' (wsp'#243#322'czynniki) do uzupe'#322'nienia.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label22: TLabel
+    Left = 44
+    Top = 628
+    Width = 403
+    Height = 16
+    Caption = 
+      'Pocz'#261'tkowe przybli'#380'enie od kt'#243'rego ma wystartowa'#263' algorytm Jacob' +
+      'iego.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label23: TLabel
+    Left = 42
+    Top = 642
+    Width = 582
+    Height = 16
+    Caption = 
+      'Wyniki programu wraz z komentarzem o statusie powodzenia. W przy' +
+      'padku b'#322#281'd'#243'w zostaje on wyja'#347'niony.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label24: TLabel
+    Left = 44
+    Top = 656
+    Width = 327
+    Height = 16
+    Caption = 'Przycisk skopiowania danych z panelu wynik'#243'w do schowka.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentFont = False
+  end
+  object Label25: TLabel
+    Left = 11
+    Top = 638
+    Width = 25
+    Height = 21
+    Caption = '12.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label26: TLabel
+    Left = 11
+    Top = 652
+    Width = 25
+    Height = 21
+    Caption = '13.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label27: TLabel
+    Left = 11
+    Top = 667
+    Width = 25
+    Height = 21
+    Caption = '14.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label28: TLabel
+    Left = 44
+    Top = 671
+    Width = 195
+    Height = 16
+    Caption = 'Przycisk czyszczenia okna rozwi'#261'za'#324'.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
     ParentFont = False
   end
 end
