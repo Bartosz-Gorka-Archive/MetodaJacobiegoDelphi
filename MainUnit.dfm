@@ -336,7 +336,7 @@ object MainForm: TMainForm
         Height = 21
         Associate = ExampleNumber
         Min = 1
-        Max = 3
+        Max = 7
         Position = 1
         TabOrder = 11
       end

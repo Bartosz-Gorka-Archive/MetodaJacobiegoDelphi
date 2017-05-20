@@ -351,315 +351,70 @@ type
   begin
     if (x.a <= 0) AND (x.b >= 0) then
       Result := True
-  else
-    Result := False;
-  end;
+    else
+      Result := False;
+  end { containtZero };
 
-function int_width(const x: interval): Extended;
-begin
-  SetRoundMode(rmUp);
-  Result := x.b - x.a;
-  SetRoundMode(rmNearest)
-end { int_width };
-
-function iabs(const x: interval): interval;
-begin
-  if (x.a <= 0) and (x.b <= 0) then
+  function int_width(const x: interval): Extended;
   begin
-    Result.a := abs(x.b);
-    Result.b := abs(x.a);
-  end
-  else if (x.a < 0) and (x.b > 0) then
+    SetRoundMode(rmUp);
+    Result := x.b - x.a;
+    SetRoundMode(rmNearest)
+  end { int_width };
+
+  function iabs(const x: interval): interval;
   begin
-    Result.a := 0;
-    Result.b := max(abs(x.a), x.b);
-  end
-  else
-  begin
-    Result.a := x.a;
-    Result.b := x.b;
-  end;
-end { iabs };
+    if (x.a <= 0) and (x.b <= 0) then
+    begin
+      Result.a := abs(x.b);
+      Result.b := abs(x.a);
+    end
+    else if (x.a < 0) and (x.b > 0) then
+    begin
+      Result.a := 0;
+      Result.b := max(abs(x.a), x.b);
+    end
+    else
+    begin
+      Result.a := x.a;
+      Result.b := x.b;
+    end;
+  end { iabs };
 
-function iadd(const x, y: interval): interval;
-begin
-  SetRoundMode(rmDown);
-  Result.a := x.a + y.a;
-  SetRoundMode(rmUp);
-  Result.b := x.b + y.b;
-  SetRoundMode(rmNearest)
-end { iadd };
-
-class operator interval.Add(x, y: interval): interval;
-begin
-  Result := iadd(x, y)
-end { Add };
-
-function isub(const x, y: interval): interval;
-begin
-  SetRoundMode(rmDown);
-  Result.a := x.a - y.b;
-  SetRoundMode(rmUp);
-  Result.b := x.b - y.a;
-  SetRoundMode(rmNearest)
-end { isub };
-
-class operator interval.Subtract(x, y: interval): interval;
-begin
-  Result := isub(x, y)
-end { Subtract };
-
-function imul(const x, y: interval): interval;
-
-var
-  x1y1, x1y2, x2y1: Extended;
-begin
-  SetRoundMode(rmDown);
-  x1y1 := x.a * y.a;
-  x1y2 := x.a * y.b;
-  x2y1 := x.b * y.a;
-  with Result do
-  begin
-    a := x.b * y.b;
-    if x2y1 < a then
-      a := x2y1;
-    if x1y2 < a then
-      a := x1y2;
-    if x1y1 < a then
-      a := x1y1
-  end;
-  SetRoundMode(rmUp);
-  x1y1 := x.a * y.a;
-  x1y2 := x.a * y.b;
-  x2y1 := x.b * y.a;
-  with Result do
-  begin
-    b := x.b * y.b;
-    if x2y1 > b then
-      b := x2y1;
-    if x1y2 > b then
-      b := x1y2;
-    if x1y1 > b then
-      b := x1y1
-  end;
-  SetRoundMode(rmNearest)
-end { imul };
-
-class operator interval.Multiply(x, y: interval): interval;
-begin
-  Result := imul(x, y)
-end { Multiply };
-
-function idiv(const x, y: interval): interval;
-
-var
-  x1y1, x1y2, x2y1: Extended;
-begin
-  if (y.a <= 0.0) and (y.b >= 0.0) then
-    raise EZeroDivide.Create('Division by an interval containing 0.')
-  else
+  function iadd(const x, y: interval): interval;
   begin
     SetRoundMode(rmDown);
-    x1y1 := x.a / y.a;
-    x1y2 := x.a / y.b;
-    x2y1 := x.b / y.a;
-    with Result do
-    begin
-      a := x.b / y.b;
-      if x2y1 < a then
-        a := x2y1;
-      if x1y2 < a then
-        a := x1y2;
-      if x1y1 < a then
-        a := x1y1
-    end;
-    SetRoundMode(rmUp);
-    x1y1 := x.a / y.a;
-    x1y2 := x.a / y.b;
-    x2y1 := x.b / y.a;
-    with Result do
-    begin
-      b := x.b / y.b;
-      if x2y1 > b then
-        b := x2y1;
-      if x1y2 > b then
-        b := x1y2;
-      if x1y1 > b then
-        b := x1y1
-    end
-  end;
-  SetRoundMode(rmNearest)
-end { idiv };
-
-class operator interval.Divide(x, y: interval): interval;
-begin
-  Result := idiv(x, y)
-end { Divide };
-
-class operator dinterval.Implicit(x: Extended): dinterval;
-
-var
-  s: string;
-begin
-  Str(x: 26, s);
-  Result.a := left_read(s);
-  Result.b := right_read(s)
-end { dImplicit };
-
-class operator dinterval.Negative(x: dinterval): dinterval;
-
-var
-  z: dinterval;
-begin
-  z := x;
-  Result.a := -z.b;
-  Result.b := -z.a
-end { dNegative };
-
-class operator dinterval.Positive(x: dinterval): dinterval;
-begin
-  Result.a := x.a;
-  Result.b := x.b
-end { dPositive };
-
-function dint_width(const x: dinterval): Extended;
-
-var
-  w1, w2: Extended;
-begin
-  SetRoundMode(rmUp);
-  w1 := x.b - x.a;
-  if w1 < 0 then
-    w1 := -w1;
-  SetRoundMode(rmDown);
-  w2 := x.b - x.a;
-  if w2 < 0 then
-    w2 := -w2;
-  if w1 > w2 then
-    Result := w1
-  else
-    Result := w2;
-  SetRoundMode(rmNearest)
-end { dint_width };
-
-function projection(const x: dinterval): interval;
-
-var
-  z: dinterval;
-begin
-  if x.a > x.b then
-  begin
-    z := x;
-    Result.a := z.b;
-    Result.b := z.a
-  end
-  else
-  begin
-    Result.a := x.a;
-    Result.b := x.b
-  end;
-end { projection };
-
-function opposite(const x: dinterval): dinterval;
-begin
-  Result.a := -x.a;
-  Result.b := -x.b;
-end { opposite };
-
-function inverse(const x: dinterval): dinterval;
-
-var
-  z1, z2: dinterval;
-begin
-  SetRoundMode(rmDown);
-  z1.a := 1 / x.a;
-  z2.b := 1 / x.b;
-  SetRoundMode(rmUp);
-  z1.b := 1 / x.b;
-  z2.a := 1 / x.a;
-  if dint_width(z1) >= dint_width(z2) then
-    Result := z1
-  else
-    Result := z2;
-  SetRoundMode(rmNearest)
-end { inverse };
-
-function diadd(const x, y: dinterval): dinterval;
-
-var
-  z1, z2: dinterval;
-begin
-  SetRoundMode(rmDown);
-  if (x.a <= x.b) and (y.a <= y.b) then
-  begin
     Result.a := x.a + y.a;
     SetRoundMode(rmUp);
-    Result.b := x.b + y.b
-  end
-  else
+    Result.b := x.b + y.b;
+    SetRoundMode(rmNearest)
+  end { iadd };
+
+  class operator interval.Add(x, y: interval): interval;
   begin
-    z1.a := x.a + y.a;
-    z2.b := x.b + y.b;
-    SetRoundMode(rmUp);
-    z1.b := x.b + y.b;
-    z2.a := x.a + y.a;
-    if dint_width(z1) >= dint_width(z2) then
-      Result := z1
-    else
-      Result := z2
-  end;
-  SetRoundMode(rmNearest)
-end { diadd };
+    Result := iadd(x, y)
+  end { Add };
 
-class operator dinterval.Add(x, y: dinterval): dinterval;
-begin
-  Result := diadd(x, y)
-end { dAdd };
-
-function disub(const x, y: dinterval): dinterval;
-
-var
-  z1, z2: dinterval;
-begin
-  SetRoundMode(rmDown);
-  if (x.a <= x.b) and (y.a <= y.b) then
+  function isub(const x, y: interval): interval;
   begin
+    SetRoundMode(rmDown);
     Result.a := x.a - y.b;
     SetRoundMode(rmUp);
-    Result.b := x.b - y.a
-  end
-  else
+    Result.b := x.b - y.a;
+    SetRoundMode(rmNearest)
+  end { isub };
+
+  class operator interval.Subtract(x, y: interval): interval;
   begin
-    z1.a := x.a - y.b;
-    z2.b := x.b - y.a;
-    SetRoundMode(rmUp);
-    z1.b := x.b - y.a;
-    z2.a := x.a - y.b;
-    if dint_width(z1) >= dint_width(z2) then
-      Result := z1
-    else
-      Result := z2
-  end;
-  SetRoundMode(rmNearest)
-end { disub };
+    Result := isub(x, y)
+  end { Subtract };
 
-class operator dinterval.Subtract(x, y: dinterval): dinterval;
-begin
-  Result := disub(x, y)
-end { dSubtract };
+  function imul(const x, y: interval): interval;
 
-function dimul(const x, y: dinterval): dinterval;
-
-var
-  z1, z2: dinterval;
-
-var
-  x1y1, x1y2, x2y1, z: Extended;
-  xn, xp, yn, yp, zero: Boolean;
-begin
-  SetRoundMode(rmDown);
-  if (x.a <= x.b) and (y.a <= y.b) then
+  var
+    x1y1, x1y2, x2y1: Extended;
   begin
+    SetRoundMode(rmDown);
     x1y1 := x.a * y.a;
     x1y2 := x.a * y.b;
     x2y1 := x.b * y.a;
@@ -686,178 +441,25 @@ begin
         b := x1y2;
       if x1y1 > b then
         b := x1y1
-    end
-  end
-  else
+    end;
+    SetRoundMode(rmNearest)
+  end { imul };
+
+  class operator interval.Multiply(x, y: interval): interval;
   begin
-    xn := (x.a < 0) and (x.b < 0);
-    xp := (x.a > 0) and (x.b > 0);
-    yn := (y.a < 0) and (y.b < 0);
-    yp := (y.a > 0) and (y.b > 0);
-    zero := False;
-    // A, B in H-T
-    if (xn or xp) and (yn or yp) then
-      if xp and yp then
-      begin
-        z1.a := x.a * y.a;
-        z2.b := x.b * y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.b * y.b;
-        z2.a := x.a * y.a
-      end
-      else if xp and yn then
-      begin
-        z1.a := x.b * y.a;
-        z2.b := x.a * y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.a * y.b;
-        z2.a := x.b * y.a
-      end
-      else if xn and yp then
-      begin
-        z1.a := x.a * y.b;
-        z2.b := x.b * y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.b * y.a;
-        z2.a := x.a * y.b
-      end
-      else
-      begin
-        z1.a := x.b * y.b;
-        z2.b := x.a * y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.a * y.a;
-        z2.a := x.b * y.b
-      end
-      // A in H-T, B in T
-    else if (xn or xp) and ((y.a <= 0) and (y.b >= 0) or (y.a >= 0) and
-      (y.b <= 0)) then
-      if xp and (y.a <= y.b) then
-      begin
-        z1.a := x.b * y.a;
-        z2.b := x.b * y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.b * y.b;
-        z2.a := x.b * y.a
-      end
-      else if xp and (y.a > y.b) then
-      begin
-        z1.a := x.a * y.a;
-        z2.b := x.a * y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.a * y.b;
-        z2.a := x.a * y.a
-      end
-      else if xn and (y.a <= y.b) then
-      begin
-        z1.a := x.a * y.b;
-        z2.b := x.a * y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.a * y.a;
-        z2.a := x.a * y.b
-      end
-      else
-      begin
-        z1.a := x.b * y.b;
-        z2.b := x.b * y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.b * y.a;
-        z2.a := x.b * y.b
-      end
-      // A in T, B in H-T
-    else if ((x.a <= 0) and (x.b >= 0) or (x.a >= 0) and (x.b <= 0)) and
-      (yn or yp) then
-      if (x.a <= x.b) and yp then
-      begin
-        z1.a := x.a * y.b;
-        z2.b := x.b * y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.b * y.b;
-        z2.a := x.a * y.b
-      end
-      else if (x.a <= 0) and yn then
-      begin
-        z1.a := x.b * y.a;
-        z2.b := x.a * y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.a * y.a;
-        z2.a := x.b * y.a
-      end
-      else if (x.a > x.b) and yp then
-      begin
-        z1.a := x.a * y.a;
-        z2.b := x.b * y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.b * y.a;
-        z2.a := x.a * y.a
-      end
-      else
-      begin
-        z1.a := x.b * y.b;
-        z2.b := x.a * y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.a * y.b;
-        z2.a := x.b * y.b
-      end
-      // A, B in Z-
-    else if (x.a >= 0) and (x.b <= 0) and (y.a >= 0) and (y.b <= 0) then
-    begin
-      z1.a := x.a * y.a;
-      z := x.b * y.b;
-      if z1.a < z then
-        z1.a := z;
-      z2.b := x.a * y.b;
-      z := x.b * y.a;
-      if z < z2.b then
-        z2.b := z;
-      SetRoundMode(rmUp);
-      z1.b := x.a * y.b;
-      z := x.b * y.a;
-      if z < z1.b then
-        z1.b := z;
-      z2.a := x.a * y.a;
-      z := x.b * y.b;
-      if z2.a < z then
-        z2.a := z
-    end
-    // A in Z and B in Z- or A in Z- and B in Z
-    else
-      zero := True;
-    if zero then
-    begin
-      Result.a := 0;
-      Result.b := 0
-    end
-    else if dint_width(z1) >= dint_width(z2) then
-      Result := z1
-    else
-      Result := z2
-  end;
-  SetRoundMode(rmNearest)
-end { dimul };
+    Result := imul(x, y)
+  end { Multiply };
 
-class operator dinterval.Multiply(x, y: dinterval): dinterval;
-begin
-  Result := dimul(x, y)
-end { dMultiply };
+  function idiv(const x, y: interval): interval;
 
-function didiv(const x, y: dinterval): dinterval;
-
-var
-  x1y1, x1y2, x2y1: Extended;
-  z1, z2: dinterval;
-  xn, xp, yn, yp, zero: Boolean;
-begin
-  SetRoundMode(rmDown);
-  if (x.a <= x.b) and (y.a <= y.b) then
+  var
+    x1y1, x1y2, x2y1: Extended;
   begin
     if (y.a <= 0.0) and (y.b >= 0.0) then
-    begin
-      SetRoundMode(rmNearest);
-      raise EZeroDivide.Create('Division by an interval ' + 'containing 0.')
-    end
+      raise EZeroDivide.Create('Division by an interval containing 0.')
     else
     begin
+      SetRoundMode(rmDown);
       x1y1 := x.a / y.a;
       x1y2 := x.a / y.b;
       x2y1 := x.b / y.a;
@@ -885,750 +487,1146 @@ begin
         if x1y1 > b then
           b := x1y1
       end
-    end
-  end
-  else
+    end;
+    SetRoundMode(rmNearest)
+  end { idiv };
+
+  class operator interval.Divide(x, y: interval): interval;
   begin
-    xn := (x.a < 0) and (x.b < 0);
-    xp := (x.a > 0) and (x.b > 0);
-    yn := (y.a < 0) and (y.b < 0);
-    yp := (y.a > 0) and (y.b > 0);
-    zero := False;
-    // A, B in H-T
-    if (xn or xp) and (yn or yp) then
-      if xp and yp then
-      begin
-        z1.a := x.a / y.b;
-        z2.b := x.b / y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.b / y.a;
-        z2.a := x.a / y.b
-      end
-      else if xp and yn then
-      begin
-        z1.a := x.b / y.b;
-        z2.b := x.a / y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.a / y.a;
-        z2.a := x.b / y.b
-      end
-      else if xn and yp then
-      begin
-        z1.a := x.a / y.a;
-        z2.b := x.b / y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.b / y.b;
-        z2.a := x.a / y.a
-      end
-      else
-      begin
-        z1.a := x.b / y.a;
-        z2.b := x.a / y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.a / y.b;
-        z2.a := x.b / y.a
-      end
-      // A in T, B in H-T
-    else if (x.a <= 0) and (x.b >= 0) or (x.a >= 0) and (x.b <= 0) and
-      (yn or yp) then
-      if (x.a <= x.b) and yp then
-      begin
-        z1.a := x.a / y.a;
-        z2.b := x.b / y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.b / y.a;
-        z2.a := x.a / y.a
-      end
-      else if (x.a <= x.b) and yn then
-      begin
-        z1.a := x.b / y.b;
-        z2.b := x.a / y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.a / y.b;
-        z2.a := x.b / y.b
-      end
-      else if (x.a > x.b) and yp then
-      begin
-        z1.a := x.a / y.b;
-        z2.b := x.b / y.b;
-        SetRoundMode(rmUp);
-        z1.b := x.b / y.b;
-        z2.a := x.a / y.b
-      end
-      else
-      begin
-        z1.a := x.b / y.a;
-        z2.b := x.a / y.a;
-        SetRoundMode(rmUp);
-        z1.b := x.a / y.a;
-        z2.a := x.b / y.a
-      end
+    Result := idiv(x, y)
+  end { Divide };
+
+  class operator dinterval.Implicit(x: Extended): dinterval;
+
+  var
+    s: string;
+  begin
+    Str(x: 26, s);
+    Result.a := left_read(s);
+    Result.b := right_read(s)
+  end { dImplicit };
+
+  class operator dinterval.Negative(x: dinterval): dinterval;
+
+  var
+    z: dinterval;
+  begin
+    z := x;
+    Result.a := -z.b;
+    Result.b := -z.a
+  end { dNegative };
+
+  class operator dinterval.Positive(x: dinterval): dinterval;
+  begin
+    Result.a := x.a;
+    Result.b := x.b
+  end { dPositive };
+
+  function dint_width(const x: dinterval): Extended;
+
+  var
+    w1, w2: Extended;
+  begin
+    SetRoundMode(rmUp);
+    w1 := x.b - x.a;
+    if w1 < 0 then
+      w1 := -w1;
+    SetRoundMode(rmDown);
+    w2 := x.b - x.a;
+    if w2 < 0 then
+      w2 := -w2;
+    if w1 > w2 then
+      Result := w1
     else
-      zero := True;
-    if zero then
+      Result := w2;
+    SetRoundMode(rmNearest)
+  end { dint_width };
+
+  function projection(const x: dinterval): interval;
+
+  var
+    z: dinterval;
+  begin
+    if x.a > x.b then
     begin
-      SetRoundMode(rmNearest);
-      raise EZeroDivide.Create('Division by an interval ' + 'containing 0.')
+      z := x;
+      Result.a := z.b;
+      Result.b := z.a
     end
-    else if dint_width(z1) >= dint_width(z2) then
+    else
+    begin
+      Result.a := x.a;
+      Result.b := x.b
+    end;
+  end { projection };
+
+  function opposite(const x: dinterval): dinterval;
+  begin
+    Result.a := -x.a;
+    Result.b := -x.b;
+  end { opposite };
+
+  function inverse(const x: dinterval): dinterval;
+
+  var
+    z1, z2: dinterval;
+  begin
+    SetRoundMode(rmDown);
+    z1.a := 1 / x.a;
+    z2.b := 1 / x.b;
+    SetRoundMode(rmUp);
+    z1.b := 1 / x.b;
+    z2.a := 1 / x.a;
+    if dint_width(z1) >= dint_width(z2) then
       Result := z1
     else
-      Result := z2
-  end;
-  SetRoundMode(rmNearest)
-end { didiv };
+      Result := z2;
+    SetRoundMode(rmNearest)
+  end { inverse };
 
-class operator dinterval.Divide(x, y: dinterval): dinterval;
-begin
-  Result := didiv(x, y)
-end { dDivide };
+  function diadd(const x, y: dinterval): dinterval;
 
-procedure to_fixed_point(const awzi: char_tab; var significand: string);
-
-var
-  exponent: SmallInt;
-  i, j, k, code: Integer;
-  remember, s1, s2, sum: Byte;
-  short_sumz: ShortString;
-  sumz: string;
-begin
-  exponent := 0;
-  j := 1;
-  for i := 16 downto 2 do
+  var
+    z1, z2: dinterval;
   begin
-    if awzi[i] = '1' then
-      exponent := exponent + j;
-    j := 2 * j
-  end;
-  exponent := exponent - 16383;
-  for i := 80 downto 17 do
-    if awzi[i] = '1' then
+    SetRoundMode(rmDown);
+    if (x.a <= x.b) and (y.a <= y.b) then
     begin
-      remember := 0;
-      for j := 65 downto 3 do
-      begin
-        Val(significand[j], s1, code);
-        Val(ldi[i - 17, j], s2, code);
-        sum := s1 + s2 + remember;
-        Str(sum, short_sumz);
-        sumz := string(short_sumz);
-        if sum > 9 then
-        begin
-          significand[j] := sumz[2];
-          Val(sumz[1], remember, code);
-          if j = 3 then
-          begin
-            Val(significand[1], s1, code);
-            sum := s1 + remember;
-            Str(sum, short_sumz);
-            sumz := string(short_sumz);
-            significand[1] := sumz[1]
-          end
-        end
-        else
-        begin
-          significand[j] := sumz[1];
-          remember := 0
-        end
-      end;
-      Val(significand[1], s1, code);
-      Val(ldi[i - 17, 1], s2, code);
-      sum := s1 + s2;
-      Str(sum, short_sumz);
-      sumz := string(short_sumz);
-      significand[1] := sumz[1];
-    end;
-  if exponent > 0 then
-    for i := 1 to exponent do
-    begin
-      j := Length(significand);
-      remember := 0;
-      for k := j downto j - 62 do
-      begin
-        Val(significand[k], s1, code);
-        sum := 2 * s1 + remember;
-        Str(sum, short_sumz);
-        sumz := string(short_sumz);
-        if sum > 9 then
-        begin
-          significand[k] := sumz[2];
-          Val(sumz[1], remember, code)
-        end
-        else
-        begin
-          significand[k] := sumz[1];
-          remember := 0
-        end
-      end;
-      for k := j - 64 downto 1 do
-      begin
-        Val(significand[k], s1, code);
-        sum := 2 * s1 + remember;
-        Str(sum, short_sumz);
-        sumz := string(short_sumz);
-        if sum > 9 then
-        begin
-          significand[k] := sumz[2];
-          Val(sumz[1], remember, code);
-          if k = 1 then
-            significand := sumz[1] + significand
-        end
-        else
-        begin
-          significand[k] := sumz[1];
-          remember := 0
-        end
-      end
-    end
-  else if exponent < 0 then
-    for i := 1 to -exponent do
-    begin
-      j := Length(significand);
-      if significand[1] = '1' then
-      begin
-        significand[1] := '0';
-        remember := 10
-      end
-      else
-        remember := 0;
-      for k := 3 to j do
-      begin
-        Val(significand[k], s1, code);
-        sum := remember + s1;
-        s1 := sum div 2;
-        Str(s1, short_sumz);
-        sumz := string(short_sumz);
-        significand[k] := sumz[1];
-        remember := 10 * (sum mod 2);
-        if (k = j) and (remember <> 0) then
-          significand := significand + '5'
-      end
-    end;
-  if awzi[1] = '1' then
-    significand := '-' + significand
-  else
-    significand := '+' + significand;
-  if FormatSettings.DecimalSeparator = ',' then
-    while (significand[Length(significand)] = '0') and
-      (significand[Length(significand) - 1] <> ',') do
-      significand := Copy(significand, 1, Length(significand) - 1)
-  else
-    while (significand[Length(significand)] = '0') and
-      (significand[Length(significand) - 1] <> '.') do
-      significand := Copy(significand, 1, Length(significand) - 1)
-end { to_fixed_point };
-
-function int_read(const sa: string): interval;
-
-var
-  x, px, nx: Extended;
-  sx, sa1: string;
-  i, j: Integer;
-  tab: array [1 .. 10] of Byte absolute x;
-  eps: array [1 .. 10] of Byte;
-  epsx: Extended absolute eps;
-  epsw: Word absolute eps;
-  digits, rev_digits: char_tab;
-  ix: interval;
-  sep: Char;
-begin
-  sa1 := sa;
-  if FormatSettings.DecimalSeparator = ',' then
-    sep := ','
-  else
-    sep := '.';
-  if (Pos('.', sa1) > 0) and (FormatSettings.DecimalSeparator = ',') then
-    sa1[Pos('.', sa1)] := ',';
-  x := StrToFloat(sa1);
-  if Pos('e', sa1) > 0 then
-    sa1[Pos('e', sa1)] := 'E';
-  while sa1[1] = ' ' do
-    Delete(sa1, 1, 1);
-  while sa1[Length(sa1)] = ' ' do
-    Delete(sa1, Length(sa1), 1);
-  if (sa1[1] <> '-') and (sa1[1] <> '+') then
-    Insert('+', sa1, 1);
-  while (sa1[2] = '0') and (Length(sa1) > 2) and (sa1[3] <> 'e') and
-    (sa1[3] <> 'E') and (sa1[3] <> sep) do
-    Delete(sa1, 2, 1);
-  if (sa1[Length(sa1)] = 'E') or (sa1[Length(sa1)] = '+') or
-    (sa1[Length(sa1)] = '-') then
-    sa1 := sa1 + '0'
-  else if Pos('E', sa1) = 0 then
-    sa1 := sa1 + 'E0';
-  if Pos(sep, sa1) = 0 then
-    Insert(sep + '0', sa1, Pos('E', sa1));
-  sx := Copy(sa1, Pos('E', sa1) + 1, Length(sa1) - Pos('E', sa1));
-  sa1 := Copy(sa1, 1, Pos('E', sa1) - 1);
-  j := StrToInt(sx);
-  if j > 0 then
-    for i := 1 to j do
-    begin
-      Insert(sep, sa1, Pos(sep, sa1) + 2);
-      Delete(sa1, Pos(sep, sa1), 1);
-      if Pos(sep, sa1) = Length(sa1) then
-        sa1 := sa1 + '0'
-    end
-  else if j < 0 then
-    for i := j to -1 do
-    begin
-      Insert(sep, sa1, Pos(sep, sa1) - 1);
-      Delete(sa1, Pos(sep, sa1) + 2, 1);
-      if sa1[2] = sep then
-        Insert('0', sa1, 2)
-    end;
-  while (sa1[Length(sa1)] = '0') and (sa1[Length(sa1) - 1] <> sep) do
-    sa1 := Copy(sa1, 1, Length(sa1) - 1);
-  for i := 1 to 10 do
-    for j := 7 downto 0 do
-      if tab[i] and bit[j] = bit[j] then
-        digits[8 * i - j] := '1'
-      else
-        digits[8 * i - j] := '0';
-  for i := 1 to 10 do
-    for j := 1 to 8 do
-      rev_digits[8 * (i - 1) + j] := digits[80 - 8 * i + j];
-  sx := '0' + sep +
-    '000000000000000000000000000000000000000000000000000000000000000';
-  to_fixed_point(rev_digits, sx);
-  if sa1 = sx then
-  begin
-    ix.a := x;
-    ix.b := x
-  end
-  else
-  begin
-    for i := 18 to 80 do
-      rev_digits[i] := '0';
-    rev_digits[17] := '1';
-    rev_digits[1] := '0';
-    for i := 1 to 2 do
-    begin
-      eps[i] := 0;
-      for j := 1 to 8 do
-        if rev_digits[8 * (i - 1) + j] = '1' then
-          eps[i] := eps[i] or bit[8 - j]
-    end;
-    epsw := Swap(epsw);
-    epsw := epsw - 63;
-    epsw := Swap(epsw);
-    for i := 1 to 2 do
-      for j := 7 downto 0 do
-        if eps[i] and bit[j] = bit[j] then
-          rev_digits[8 * i - j] := '1'
-        else
-          rev_digits[8 * i - j] := '0';
-    for i := 1 to 10 do
-      for j := 1 to 8 do
-        digits[8 * (i - 1) + j] := rev_digits[80 - 8 * i + j];
-    for i := 1 to 10 do
-    begin
-      eps[i] := 0;
-      for j := 1 to 8 do
-        if digits[8 * (i - 1) + j] = '1' then
-          eps[i] := eps[i] or bit[8 - j]
-    end;
-    px := x - epsx;
-    nx := x + epsx;
-    i := Length(sa1) - Pos(sep, sa1);
-    j := Length(sx) - Pos(sep, sx);
-    if j > i then
-      i := j;
-    while Length(sa1) - Pos(sep, sa1) < i do
-      sa1 := sa1 + '0';
-    while Length(sx) - Pos(sep, sx) < i do
-      sx := sx + '0';
-    i := Pos(sep, sa1);
-    j := Pos(sep, sx);
-    if j > i then
-      i := j;
-    while Pos(sep, sa1) < i do
-      Insert('0', sa1, 2);
-    while Pos(sep, sx) < i do
-      Insert('0', sx, 2);
-    if sx[1] = '+' then
-      if sa1 < sx then
-      begin
-        ix.a := px;
-        ix.b := x
-      end
-      else
-      begin
-        ix.a := x;
-        ix.b := nx
-      end
-    else if sa1 < sx then
-    begin
-      ix.a := x;
-      ix.b := nx
+      Result.a := x.a + y.a;
+      SetRoundMode(rmUp);
+      Result.b := x.b + y.b
     end
     else
     begin
-      ix.a := px;
-      ix.b := x
-    end
-  end;
-  Result.a := ix.a;
-  Result.b := ix.b
-end { int_read };
-
-function left_read(const sa: string): Extended;
-
-var
-  int_number: interval;
-begin
-  int_number := int_read(sa);
-  Result := int_number.a
-end { left_read };
-
-function right_read(const sa: string): Extended;
-
-var
-  int_number: interval;
-begin
-  int_number := int_read(sa);
-  Result := int_number.b
-end { right_read };
-
-function dleft_read(const sa: string): Extended;
-
-var
-  int_number: interval;
-begin
-  int_number := int_read(sa);
-  Result := int_number.b
-end { dleft_read };
-
-function dright_read(const sa: string): Extended;
-
-var
-  int_number: interval;
-begin
-  int_number := int_read(sa);
-  Result := int_number.a
-end { dright_read };
-
-{$IFDEF WIN64}
-
-procedure to_fixed_point_Win64(const awzi: char_tab; var significand: string);
-
-var
-  exponent: SmallInt;
-  i, j, k, code: Integer;
-  remember, s1, s2, sum: Byte;
-  short_sumz: ShortString;
-  sumz: string;
-  exponent_zero: Boolean;
-begin
-  exponent := 0;
-  j := 1;
-  for i := 12 downto 2 do
-  begin
-    if awzi[i] = '1' then
-      exponent := exponent + j;
-    j := 2 * j
-  end;
-  if exponent = 0 then
-  begin
-    exponent_zero := True;
-    exponent := -1022
-  end
-  else
-  begin
-    exponent_zero := False;
-    exponent := exponent - 1023
-  end;
-  for i := 64 downto 13 do
-    if awzi[i] = '1' then
-    begin
-      remember := 0;
-      for j := 54 downto 3 do
-      begin
-        Val(significand[j], s1, code);
-        Val(ldi_double[i - 12, j], s2, code);
-        sum := s1 + s2 + remember;
-        Str(sum, short_sumz);
-        sumz := string(short_sumz);
-        if sum > 9 then
-        begin
-          significand[j] := sumz[2];
-          Val(sumz[1], remember, code);
-          if j = 3 then
-          begin
-            Val(significand[1], s1, code);
-            sum := s1 + remember;
-            Str(sum, short_sumz);
-            sumz := string(short_sumz);
-            significand[1] := sumz[1]
-          end
-        end
-        else
-        begin
-          significand[j] := sumz[1];
-          remember := 0
-        end
-      end;
-      Val(significand[1], s1, code);
-      Val(ldi_double[i - 12, 1], s2, code);
-      sum := s1 + s2;
-      Str(sum, short_sumz);
-      sumz := string(short_sumz);
-      significand[1] := sumz[1];
-      if (i = 13) and not exponent_zero then
-      begin
-        Val(ldi[0], s2, code);
-        sum := sum + s2;
-        Str(sum, short_sumz);
-        sumz := string(short_sumz);
-        significand[1] := sumz[1]
-      end
+      z1.a := x.a + y.a;
+      z2.b := x.b + y.b;
+      SetRoundMode(rmUp);
+      z1.b := x.b + y.b;
+      z2.a := x.a + y.a;
+      if dint_width(z1) >= dint_width(z2) then
+        Result := z1
+      else
+        Result := z2
     end;
-  if (significand[1] = '0') and not exponent_zero then
-    significand[1] := '1';
-  if exponent > 0 then
-    for i := 1 to exponent do
+    SetRoundMode(rmNearest)
+  end { diadd };
+
+  class operator dinterval.Add(x, y: dinterval): dinterval;
+  begin
+    Result := diadd(x, y)
+  end { dAdd };
+
+  function disub(const x, y: dinterval): dinterval;
+
+  var
+    z1, z2: dinterval;
+  begin
+    SetRoundMode(rmDown);
+    if (x.a <= x.b) and (y.a <= y.b) then
     begin
-      j := Length(significand);
-      remember := 0;
-      for k := j downto j - 51 do
+      Result.a := x.a - y.b;
+      SetRoundMode(rmUp);
+      Result.b := x.b - y.a
+    end
+    else
+    begin
+      z1.a := x.a - y.b;
+      z2.b := x.b - y.a;
+      SetRoundMode(rmUp);
+      z1.b := x.b - y.a;
+      z2.a := x.a - y.b;
+      if dint_width(z1) >= dint_width(z2) then
+        Result := z1
+      else
+        Result := z2
+    end;
+    SetRoundMode(rmNearest)
+  end { disub };
+
+  class operator dinterval.Subtract(x, y: dinterval): dinterval;
+  begin
+    Result := disub(x, y)
+  end { dSubtract };
+
+  function dimul(const x, y: dinterval): dinterval;
+
+  var
+    z1, z2: dinterval;
+
+  var
+    x1y1, x1y2, x2y1, z: Extended;
+    xn, xp, yn, yp, zero: Boolean;
+  begin
+    SetRoundMode(rmDown);
+    if (x.a <= x.b) and (y.a <= y.b) then
+    begin
+      x1y1 := x.a * y.a;
+      x1y2 := x.a * y.b;
+      x2y1 := x.b * y.a;
+      with Result do
       begin
-        Val(significand[k], s1, code);
-        sum := 2 * s1 + remember;
-        Str(sum, short_sumz);
-        sumz := string(short_sumz);
-        if sum > 9 then
-        begin
-          significand[k] := sumz[2];
-          Val(sumz[1], remember, code)
-        end
-        else
-        begin
-          significand[k] := sumz[1];
-          remember := 0
-        end
+        a := x.b * y.b;
+        if x2y1 < a then
+          a := x2y1;
+        if x1y2 < a then
+          a := x1y2;
+        if x1y1 < a then
+          a := x1y1
       end;
-      for k := j - 53 downto 1 do
+      SetRoundMode(rmUp);
+      x1y1 := x.a * y.a;
+      x1y2 := x.a * y.b;
+      x2y1 := x.b * y.a;
+      with Result do
       begin
-        Val(significand[k], s1, code);
-        sum := 2 * s1 + remember;
-        Str(sum, short_sumz);
-        sumz := string(short_sumz);
-        if sum > 9 then
-        begin
-          significand[k] := sumz[2];
-          Val(sumz[1], remember, code);
-          if k = 1 then
-            significand := sumz[1] + significand
-        end
-        else
-        begin
-          significand[k] := sumz[1];
-          remember := 0
-        end
+        b := x.b * y.b;
+        if x2y1 > b then
+          b := x2y1;
+        if x1y2 > b then
+          b := x1y2;
+        if x1y1 > b then
+          b := x1y1
       end
     end
-  else if exponent < 0 then
-    for i := 1 to -exponent do
+    else
     begin
-      j := Length(significand);
-      if significand[1] = '1' then
+      xn := (x.a < 0) and (x.b < 0);
+      xp := (x.a > 0) and (x.b > 0);
+      yn := (y.a < 0) and (y.b < 0);
+      yp := (y.a > 0) and (y.b > 0);
+      zero := False;
+      // A, B in H-T
+      if (xn or xp) and (yn or yp) then
+        if xp and yp then
+        begin
+          z1.a := x.a * y.a;
+          z2.b := x.b * y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.b * y.b;
+          z2.a := x.a * y.a
+        end
+        else if xp and yn then
+        begin
+          z1.a := x.b * y.a;
+          z2.b := x.a * y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.a * y.b;
+          z2.a := x.b * y.a
+        end
+        else if xn and yp then
+        begin
+          z1.a := x.a * y.b;
+          z2.b := x.b * y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.b * y.a;
+          z2.a := x.a * y.b
+        end
+        else
+        begin
+          z1.a := x.b * y.b;
+          z2.b := x.a * y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.a * y.a;
+          z2.a := x.b * y.b
+        end
+        // A in H-T, B in T
+      else if (xn or xp) and ((y.a <= 0) and (y.b >= 0) or (y.a >= 0) and
+        (y.b <= 0)) then
+        if xp and (y.a <= y.b) then
+        begin
+          z1.a := x.b * y.a;
+          z2.b := x.b * y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.b * y.b;
+          z2.a := x.b * y.a
+        end
+        else if xp and (y.a > y.b) then
+        begin
+          z1.a := x.a * y.a;
+          z2.b := x.a * y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.a * y.b;
+          z2.a := x.a * y.a
+        end
+        else if xn and (y.a <= y.b) then
+        begin
+          z1.a := x.a * y.b;
+          z2.b := x.a * y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.a * y.a;
+          z2.a := x.a * y.b
+        end
+        else
+        begin
+          z1.a := x.b * y.b;
+          z2.b := x.b * y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.b * y.a;
+          z2.a := x.b * y.b
+        end
+        // A in T, B in H-T
+      else if ((x.a <= 0) and (x.b >= 0) or (x.a >= 0) and (x.b <= 0)) and
+        (yn or yp) then
+        if (x.a <= x.b) and yp then
+        begin
+          z1.a := x.a * y.b;
+          z2.b := x.b * y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.b * y.b;
+          z2.a := x.a * y.b
+        end
+        else if (x.a <= 0) and yn then
+        begin
+          z1.a := x.b * y.a;
+          z2.b := x.a * y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.a * y.a;
+          z2.a := x.b * y.a
+        end
+        else if (x.a > x.b) and yp then
+        begin
+          z1.a := x.a * y.a;
+          z2.b := x.b * y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.b * y.a;
+          z2.a := x.a * y.a
+        end
+        else
+        begin
+          z1.a := x.b * y.b;
+          z2.b := x.a * y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.a * y.b;
+          z2.a := x.b * y.b
+        end
+        // A, B in Z-
+      else if (x.a >= 0) and (x.b <= 0) and (y.a >= 0) and (y.b <= 0) then
       begin
-        significand[1] := '0';
-        remember := 10
+        z1.a := x.a * y.a;
+        z := x.b * y.b;
+        if z1.a < z then
+          z1.a := z;
+        z2.b := x.a * y.b;
+        z := x.b * y.a;
+        if z < z2.b then
+          z2.b := z;
+        SetRoundMode(rmUp);
+        z1.b := x.a * y.b;
+        z := x.b * y.a;
+        if z < z1.b then
+          z1.b := z;
+        z2.a := x.a * y.a;
+        z := x.b * y.b;
+        if z2.a < z then
+          z2.a := z
+      end
+      // A in Z and B in Z- or A in Z- and B in Z
+      else
+        zero := True;
+      if zero then
+      begin
+        Result.a := 0;
+        Result.b := 0
+      end
+      else if dint_width(z1) >= dint_width(z2) then
+        Result := z1
+      else
+        Result := z2
+    end;
+    SetRoundMode(rmNearest)
+  end { dimul };
+
+  class operator dinterval.Multiply(x, y: dinterval): dinterval;
+  begin
+    Result := dimul(x, y)
+  end { dMultiply };
+
+  function didiv(const x, y: dinterval): dinterval;
+
+  var
+    x1y1, x1y2, x2y1: Extended;
+    z1, z2: dinterval;
+    xn, xp, yn, yp, zero: Boolean;
+  begin
+    SetRoundMode(rmDown);
+    if (x.a <= x.b) and (y.a <= y.b) then
+    begin
+      if (y.a <= 0.0) and (y.b >= 0.0) then
+      begin
+        SetRoundMode(rmNearest);
+        raise EZeroDivide.Create('Division by an interval ' + 'containing 0.')
       end
       else
-        remember := 0;
-      for k := 3 to j do
       begin
-        Val(significand[k], s1, code);
-        sum := remember + s1;
-        s1 := sum div 2;
-        Str(s1, short_sumz);
-        sumz := string(short_sumz);
-        significand[k] := sumz[1];
-        remember := 10 * (sum mod 2);
-        if (k = j) and (remember <> 0) then
-          significand := significand + '5'
+        x1y1 := x.a / y.a;
+        x1y2 := x.a / y.b;
+        x2y1 := x.b / y.a;
+        with Result do
+        begin
+          a := x.b / y.b;
+          if x2y1 < a then
+            a := x2y1;
+          if x1y2 < a then
+            a := x1y2;
+          if x1y1 < a then
+            a := x1y1
+        end;
+        SetRoundMode(rmUp);
+        x1y1 := x.a / y.a;
+        x1y2 := x.a / y.b;
+        x2y1 := x.b / y.a;
+        with Result do
+        begin
+          b := x.b / y.b;
+          if x2y1 > b then
+            b := x2y1;
+          if x1y2 > b then
+            b := x1y2;
+          if x1y1 > b then
+            b := x1y1
+        end
       end
-    end;
-  if awzi[1] = '1' then
-    significand := '-' + significand
-  else
-    significand := '+' + significand;
-  if FormatSettings.DecimalSeparator = ',' then
-    while (significand[Length(significand)] = '0') and
-      (significand[Length(significand) - 1] <> ',') do
-      significand := Copy(significand, 1, Length(significand) - 1)
-  else
-    while (significand[Length(significand)] = '0') and
-      (significand[Length(significand) - 1] <> '.') do
-      significand := Copy(significand, 1, Length(significand) - 1)
-end { to_fixed_point_Win64 };
-
-function int_read_Win64(const sa: string): interval_double;
-
-var
-  x, px, nx: Double;
-  sx, sa1: string;
-  i, j: Integer;
-  tab: array [1 .. 8] of Byte absolute x;
-  eps: array [1 .. 8] of Byte;
-  epsx: Double absolute eps;
-  epsw: Word;
-  digits, rev_digits: char_tab;
-  ix: interval_double;
-  sep: Char;
-begin
-  sa1 := sa;
-  if FormatSettings.DecimalSeparator = ',' then
-    sep := ','
-  else
-    sep := '.';
-  if (Pos('.', sa1) > 0) and (FormatSettings.DecimalSeparator = ',') then
-    sa1[Pos('.', sa1)] := ',';
-  x := StrToFloat(sa1);
-  if (sa1[1] <> ' ') then
-    Insert('+', sa1, 1);
-  sx := Copy(sa1, Pos('E', sa1) + 1, Length(sa1) - Pos('E', sa1));
-  sa1 := Copy(sa1, 1, Pos('E', sa1) - 1);
-  j := StrToInt(sx);
-  if j > 0 then
-    for i := 1 to j do
-    begin
-      Insert(sep, sa1, Pos(sep, sa1) + 2);
-      Delete(sa1, Pos(sep, sa1), 1);
-      if Pos(sep, sa1) = Length(sa1) then
-        sa1 := sa1 + '0'
     end
-  else if j < 0 then
-    for i := j to -1 do
+    else
     begin
-      Insert(sep, sa1, Pos(sep, sa1) - 1);
-      Delete(sa1, Pos(sep, sa1) + 2, 1);
-      if sa1[2] = sep then
-        Insert('0', sa1, 2)
-    end;
-  while (sa1[Length(sa1)] = '0') and (sa1[Length(sa1) - 1] <> sep) do
-    sa1 := Copy(sa1, 1, Length(sa1) - 1);
-  for i := 1 to 8 do
-    for j := 7 downto 0 do
-      if tab[i] and bit[j] = bit[j] then
-        digits[8 * i - j] := '1'
+      xn := (x.a < 0) and (x.b < 0);
+      xp := (x.a > 0) and (x.b > 0);
+      yn := (y.a < 0) and (y.b < 0);
+      yp := (y.a > 0) and (y.b > 0);
+      zero := False;
+      // A, B in H-T
+      if (xn or xp) and (yn or yp) then
+        if xp and yp then
+        begin
+          z1.a := x.a / y.b;
+          z2.b := x.b / y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.b / y.a;
+          z2.a := x.a / y.b
+        end
+        else if xp and yn then
+        begin
+          z1.a := x.b / y.b;
+          z2.b := x.a / y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.a / y.a;
+          z2.a := x.b / y.b
+        end
+        else if xn and yp then
+        begin
+          z1.a := x.a / y.a;
+          z2.b := x.b / y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.b / y.b;
+          z2.a := x.a / y.a
+        end
+        else
+        begin
+          z1.a := x.b / y.a;
+          z2.b := x.a / y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.a / y.b;
+          z2.a := x.b / y.a
+        end
+        // A in T, B in H-T
+      else if (x.a <= 0) and (x.b >= 0) or (x.a >= 0) and (x.b <= 0) and
+        (yn or yp) then
+        if (x.a <= x.b) and yp then
+        begin
+          z1.a := x.a / y.a;
+          z2.b := x.b / y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.b / y.a;
+          z2.a := x.a / y.a
+        end
+        else if (x.a <= x.b) and yn then
+        begin
+          z1.a := x.b / y.b;
+          z2.b := x.a / y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.a / y.b;
+          z2.a := x.b / y.b
+        end
+        else if (x.a > x.b) and yp then
+        begin
+          z1.a := x.a / y.b;
+          z2.b := x.b / y.b;
+          SetRoundMode(rmUp);
+          z1.b := x.b / y.b;
+          z2.a := x.a / y.b
+        end
+        else
+        begin
+          z1.a := x.b / y.a;
+          z2.b := x.a / y.a;
+          SetRoundMode(rmUp);
+          z1.b := x.a / y.a;
+          z2.a := x.b / y.a
+        end
       else
-        digits[8 * i - j] := '0';
-  for i := 1 to 8 do
-    for j := 1 to 8 do
-      rev_digits[8 * (i - 1) + j] := digits[64 - 8 * i + j];
-  sx := '0' + sep + '0000000000000000000000000000000000000000000000000000';
-  to_fixed_point_Win64(rev_digits, sx);
-  if sa1 = sx then
+        zero := True;
+      if zero then
+      begin
+        SetRoundMode(rmNearest);
+        raise EZeroDivide.Create('Division by an interval ' + 'containing 0.')
+      end
+      else if dint_width(z1) >= dint_width(z2) then
+        Result := z1
+      else
+        Result := z2
+    end;
+    SetRoundMode(rmNearest)
+  end { didiv };
+
+  class operator dinterval.Divide(x, y: dinterval): dinterval;
   begin
-    ix.a := x;
-    ix.b := x
-  end
-  else
+    Result := didiv(x, y)
+  end { dDivide };
+
+  procedure to_fixed_point(const awzi: char_tab; var significand: string);
+
+  var
+    exponent: SmallInt;
+    i, j, k, code: Integer;
+    remember, s1, s2, sum: Byte;
+    short_sumz: ShortString;
+    sumz: string;
   begin
-    for i := 13 to 64 do
-      rev_digits[i] := '0';
-    rev_digits[1] := '0';
-    epsw := 0;
+    exponent := 0;
     j := 1;
-    for i := 10 downto 2 do
+    for i := 16 downto 2 do
     begin
-      if rev_digits[i] = '1' then
-        epsw := epsw + j;
+      if awzi[i] = '1' then
+        exponent := exponent + j;
       j := 2 * j
     end;
-    epsw := epsw - 13;
-    for i := 2 to 9 do
-    begin
-      j := j div 2;
-      if epsw div j = 1 then
+    exponent := exponent - 16383;
+    for i := 80 downto 17 do
+      if awzi[i] = '1' then
       begin
-        rev_digits[i] := '1';
-        epsw := epsw - j
+        remember := 0;
+        for j := 65 downto 3 do
+        begin
+          Val(significand[j], s1, code);
+          Val(ldi[i - 17, j], s2, code);
+          sum := s1 + s2 + remember;
+          Str(sum, short_sumz);
+          sumz := string(short_sumz);
+          if sum > 9 then
+          begin
+            significand[j] := sumz[2];
+            Val(sumz[1], remember, code);
+            if j = 3 then
+            begin
+              Val(significand[1], s1, code);
+              sum := s1 + remember;
+              Str(sum, short_sumz);
+              sumz := string(short_sumz);
+              significand[1] := sumz[1]
+            end
+          end
+          else
+          begin
+            significand[j] := sumz[1];
+            remember := 0
+          end
+        end;
+        Val(significand[1], s1, code);
+        Val(ldi[i - 17, 1], s2, code);
+        sum := s1 + s2;
+        Str(sum, short_sumz);
+        sumz := string(short_sumz);
+        significand[1] := sumz[1];
+      end;
+    if exponent > 0 then
+      for i := 1 to exponent do
+      begin
+        j := Length(significand);
+        remember := 0;
+        for k := j downto j - 62 do
+        begin
+          Val(significand[k], s1, code);
+          sum := 2 * s1 + remember;
+          Str(sum, short_sumz);
+          sumz := string(short_sumz);
+          if sum > 9 then
+          begin
+            significand[k] := sumz[2];
+            Val(sumz[1], remember, code)
+          end
+          else
+          begin
+            significand[k] := sumz[1];
+            remember := 0
+          end
+        end;
+        for k := j - 64 downto 1 do
+        begin
+          Val(significand[k], s1, code);
+          sum := 2 * s1 + remember;
+          Str(sum, short_sumz);
+          sumz := string(short_sumz);
+          if sum > 9 then
+          begin
+            significand[k] := sumz[2];
+            Val(sumz[1], remember, code);
+            if k = 1 then
+              significand := sumz[1] + significand
+          end
+          else
+          begin
+            significand[k] := sumz[1];
+            remember := 0
+          end
+        end
       end
-      else
-        rev_digits[i] := '0'
-    end;
-    if epsw = 1 then
-      rev_digits[10] := '1'
+    else if exponent < 0 then
+      for i := 1 to -exponent do
+      begin
+        j := Length(significand);
+        if significand[1] = '1' then
+        begin
+          significand[1] := '0';
+          remember := 10
+        end
+        else
+          remember := 0;
+        for k := 3 to j do
+        begin
+          Val(significand[k], s1, code);
+          sum := remember + s1;
+          s1 := sum div 2;
+          Str(s1, short_sumz);
+          sumz := string(short_sumz);
+          significand[k] := sumz[1];
+          remember := 10 * (sum mod 2);
+          if (k = j) and (remember <> 0) then
+            significand := significand + '5'
+        end
+      end;
+    if awzi[1] = '1' then
+      significand := '-' + significand
     else
-      rev_digits[10] := '0';
-    for i := 1 to 8 do
-      for j := 1 to 8 do
-        digits[8 * (i - 1) + j] := rev_digits[64 - 8 * i + j];
-    for i := 1 to 8 do
-    begin
-      eps[i] := 0;
-      for j := 1 to 8 do
-        if digits[8 * (i - 1) + j] = '1' then
-          eps[i] := eps[i] or bit[8 - j]
-    end;
-    px := x - epsx;
-    nx := x + epsx;
-    i := Length(sa1) - Pos(sep, sa1);
-    j := Length(sx) - Pos(sep, sx);
-    if j > i then
-      i := j;
-    while Length(sa1) - Pos(sep, sa1) < i do
-      sa1 := sa1 + '0';
-    while Length(sx) - Pos(sep, sx) < i do
-      sx := sx + '0';
-    i := Pos(sep, sa1);
-    j := Pos(sep, sx);
-    if j > i then
-      i := j;
-    while Pos(sep, sa1) < i do
-      Insert('0', sa1, 2);
-    while Pos(sep, sx) < i do
-      Insert('0', sx, 2);
-    if sx[1] = '+' then
-      if sa1 < sx then
+      significand := '+' + significand;
+    if FormatSettings.DecimalSeparator = ',' then
+      while (significand[Length(significand)] = '0') and
+        (significand[Length(significand) - 1] <> ',') do
+        significand := Copy(significand, 1, Length(significand) - 1)
+    else
+      while (significand[Length(significand)] = '0') and
+        (significand[Length(significand) - 1] <> '.') do
+        significand := Copy(significand, 1, Length(significand) - 1)
+  end { to_fixed_point };
+
+  function int_read(const sa: string): interval;
+
+  var
+    x, px, nx: Extended;
+    sx, sa1: string;
+    i, j: Integer;
+    tab: array [1 .. 10] of Byte absolute x;
+    eps: array [1 .. 10] of Byte;
+    epsx: Extended absolute eps;
+    epsw: Word absolute eps;
+    digits, rev_digits: char_tab;
+    ix: interval;
+    sep: Char;
+  begin
+    sa1 := sa;
+    if FormatSettings.DecimalSeparator = ',' then
+      sep := ','
+    else
+      sep := '.';
+    if (Pos('.', sa1) > 0) and (FormatSettings.DecimalSeparator = ',') then
+      sa1[Pos('.', sa1)] := ',';
+    x := StrToFloat(sa1);
+    if Pos('e', sa1) > 0 then
+      sa1[Pos('e', sa1)] := 'E';
+    while sa1[1] = ' ' do
+      Delete(sa1, 1, 1);
+    while sa1[Length(sa1)] = ' ' do
+      Delete(sa1, Length(sa1), 1);
+    if (sa1[1] <> '-') and (sa1[1] <> '+') then
+      Insert('+', sa1, 1);
+    while (sa1[2] = '0') and (Length(sa1) > 2) and (sa1[3] <> 'e') and
+      (sa1[3] <> 'E') and (sa1[3] <> sep) do
+      Delete(sa1, 2, 1);
+    if (sa1[Length(sa1)] = 'E') or (sa1[Length(sa1)] = '+') or
+      (sa1[Length(sa1)] = '-') then
+      sa1 := sa1 + '0'
+    else if Pos('E', sa1) = 0 then
+      sa1 := sa1 + 'E0';
+    if Pos(sep, sa1) = 0 then
+      Insert(sep + '0', sa1, Pos('E', sa1));
+    sx := Copy(sa1, Pos('E', sa1) + 1, Length(sa1) - Pos('E', sa1));
+    sa1 := Copy(sa1, 1, Pos('E', sa1) - 1);
+    j := StrToInt(sx);
+    if j > 0 then
+      for i := 1 to j do
       begin
-        ix.a := px;
-        ix.b := x
+        Insert(sep, sa1, Pos(sep, sa1) + 2);
+        Delete(sa1, Pos(sep, sa1), 1);
+        if Pos(sep, sa1) = Length(sa1) then
+          sa1 := sa1 + '0'
       end
-      else
+    else if j < 0 then
+      for i := j to -1 do
+      begin
+        Insert(sep, sa1, Pos(sep, sa1) - 1);
+        Delete(sa1, Pos(sep, sa1) + 2, 1);
+        if sa1[2] = sep then
+          Insert('0', sa1, 2)
+      end;
+    while (sa1[Length(sa1)] = '0') and (sa1[Length(sa1) - 1] <> sep) do
+      sa1 := Copy(sa1, 1, Length(sa1) - 1);
+    for i := 1 to 10 do
+      for j := 7 downto 0 do
+        if tab[i] and bit[j] = bit[j] then
+          digits[8 * i - j] := '1'
+        else
+          digits[8 * i - j] := '0';
+    for i := 1 to 10 do
+      for j := 1 to 8 do
+        rev_digits[8 * (i - 1) + j] := digits[80 - 8 * i + j];
+    sx := '0' + sep +
+      '000000000000000000000000000000000000000000000000000000000000000';
+    to_fixed_point(rev_digits, sx);
+    if sa1 = sx then
+    begin
+      ix.a := x;
+      ix.b := x
+    end
+    else
+    begin
+      for i := 18 to 80 do
+        rev_digits[i] := '0';
+      rev_digits[17] := '1';
+      rev_digits[1] := '0';
+      for i := 1 to 2 do
+      begin
+        eps[i] := 0;
+        for j := 1 to 8 do
+          if rev_digits[8 * (i - 1) + j] = '1' then
+            eps[i] := eps[i] or bit[8 - j]
+      end;
+      epsw := Swap(epsw);
+      epsw := epsw - 63;
+      epsw := Swap(epsw);
+      for i := 1 to 2 do
+        for j := 7 downto 0 do
+          if eps[i] and bit[j] = bit[j] then
+            rev_digits[8 * i - j] := '1'
+          else
+            rev_digits[8 * i - j] := '0';
+      for i := 1 to 10 do
+        for j := 1 to 8 do
+          digits[8 * (i - 1) + j] := rev_digits[80 - 8 * i + j];
+      for i := 1 to 10 do
+      begin
+        eps[i] := 0;
+        for j := 1 to 8 do
+          if digits[8 * (i - 1) + j] = '1' then
+            eps[i] := eps[i] or bit[8 - j]
+      end;
+      px := x - epsx;
+      nx := x + epsx;
+      i := Length(sa1) - Pos(sep, sa1);
+      j := Length(sx) - Pos(sep, sx);
+      if j > i then
+        i := j;
+      while Length(sa1) - Pos(sep, sa1) < i do
+        sa1 := sa1 + '0';
+      while Length(sx) - Pos(sep, sx) < i do
+        sx := sx + '0';
+      i := Pos(sep, sa1);
+      j := Pos(sep, sx);
+      if j > i then
+        i := j;
+      while Pos(sep, sa1) < i do
+        Insert('0', sa1, 2);
+      while Pos(sep, sx) < i do
+        Insert('0', sx, 2);
+      if sx[1] = '+' then
+        if sa1 < sx then
+        begin
+          ix.a := px;
+          ix.b := x
+        end
+        else
+        begin
+          ix.a := x;
+          ix.b := nx
+        end
+      else if sa1 < sx then
       begin
         ix.a := x;
         ix.b := nx
       end
-    else if sa1 < sx then
+      else
+      begin
+        ix.a := px;
+        ix.b := x
+      end
+    end;
+    Result.a := ix.a;
+    Result.b := ix.b
+  end { int_read };
+
+  function left_read(const sa: string): Extended;
+
+  var
+    int_number: interval;
+  begin
+    int_number := int_read(sa);
+    Result := int_number.a
+  end { left_read };
+
+  function right_read(const sa: string): Extended;
+
+  var
+    int_number: interval;
+  begin
+    int_number := int_read(sa);
+    Result := int_number.b
+  end { right_read };
+
+  function dleft_read(const sa: string): Extended;
+
+  var
+    int_number: interval;
+  begin
+    int_number := int_read(sa);
+    Result := int_number.b
+  end { dleft_read };
+
+  function dright_read(const sa: string): Extended;
+
+  var
+    int_number: interval;
+  begin
+    int_number := int_read(sa);
+    Result := int_number.a
+  end { dright_read };
+
+{$IFDEF WIN64}
+  procedure to_fixed_point_Win64(const awzi: char_tab; var significand: string);
+
+  var
+    exponent: SmallInt;
+    i, j, k, code: Integer;
+    remember, s1, s2, sum: Byte;
+    short_sumz: ShortString;
+    sumz: string;
+    exponent_zero: Boolean;
+  begin
+    exponent := 0;
+    j := 1;
+    for i := 12 downto 2 do
     begin
-      ix.a := x;
-      ix.b := nx
+      if awzi[i] = '1' then
+        exponent := exponent + j;
+      j := 2 * j
+    end;
+    if exponent = 0 then
+    begin
+      exponent_zero := True;
+      exponent := -1022
     end
     else
     begin
-      ix.a := px;
+      exponent_zero := False;
+      exponent := exponent - 1023
+    end;
+    for i := 64 downto 13 do
+      if awzi[i] = '1' then
+      begin
+        remember := 0;
+        for j := 54 downto 3 do
+        begin
+          Val(significand[j], s1, code);
+          Val(ldi_double[i - 12, j], s2, code);
+          sum := s1 + s2 + remember;
+          Str(sum, short_sumz);
+          sumz := string(short_sumz);
+          if sum > 9 then
+          begin
+            significand[j] := sumz[2];
+            Val(sumz[1], remember, code);
+            if j = 3 then
+            begin
+              Val(significand[1], s1, code);
+              sum := s1 + remember;
+              Str(sum, short_sumz);
+              sumz := string(short_sumz);
+              significand[1] := sumz[1]
+            end
+          end
+          else
+          begin
+            significand[j] := sumz[1];
+            remember := 0
+          end
+        end;
+        Val(significand[1], s1, code);
+        Val(ldi_double[i - 12, 1], s2, code);
+        sum := s1 + s2;
+        Str(sum, short_sumz);
+        sumz := string(short_sumz);
+        significand[1] := sumz[1];
+        if (i = 13) and not exponent_zero then
+        begin
+          Val(ldi[0], s2, code);
+          sum := sum + s2;
+          Str(sum, short_sumz);
+          sumz := string(short_sumz);
+          significand[1] := sumz[1]
+        end
+      end;
+    if (significand[1] = '0') and not exponent_zero then
+      significand[1] := '1';
+    if exponent > 0 then
+      for i := 1 to exponent do
+      begin
+        j := Length(significand);
+        remember := 0;
+        for k := j downto j - 51 do
+        begin
+          Val(significand[k], s1, code);
+          sum := 2 * s1 + remember;
+          Str(sum, short_sumz);
+          sumz := string(short_sumz);
+          if sum > 9 then
+          begin
+            significand[k] := sumz[2];
+            Val(sumz[1], remember, code)
+          end
+          else
+          begin
+            significand[k] := sumz[1];
+            remember := 0
+          end
+        end;
+        for k := j - 53 downto 1 do
+        begin
+          Val(significand[k], s1, code);
+          sum := 2 * s1 + remember;
+          Str(sum, short_sumz);
+          sumz := string(short_sumz);
+          if sum > 9 then
+          begin
+            significand[k] := sumz[2];
+            Val(sumz[1], remember, code);
+            if k = 1 then
+              significand := sumz[1] + significand
+          end
+          else
+          begin
+            significand[k] := sumz[1];
+            remember := 0
+          end
+        end
+      end
+    else if exponent < 0 then
+      for i := 1 to -exponent do
+      begin
+        j := Length(significand);
+        if significand[1] = '1' then
+        begin
+          significand[1] := '0';
+          remember := 10
+        end
+        else
+          remember := 0;
+        for k := 3 to j do
+        begin
+          Val(significand[k], s1, code);
+          sum := remember + s1;
+          s1 := sum div 2;
+          Str(s1, short_sumz);
+          sumz := string(short_sumz);
+          significand[k] := sumz[1];
+          remember := 10 * (sum mod 2);
+          if (k = j) and (remember <> 0) then
+            significand := significand + '5'
+        end
+      end;
+    if awzi[1] = '1' then
+      significand := '-' + significand
+    else
+      significand := '+' + significand;
+    if FormatSettings.DecimalSeparator = ',' then
+      while (significand[Length(significand)] = '0') and
+        (significand[Length(significand) - 1] <> ',') do
+        significand := Copy(significand, 1, Length(significand) - 1)
+    else
+      while (significand[Length(significand)] = '0') and
+        (significand[Length(significand) - 1] <> '.') do
+        significand := Copy(significand, 1, Length(significand) - 1)
+  end { to_fixed_point_Win64 };
+
+  function int_read_Win64(const sa: string): interval_double;
+
+  var
+    x, px, nx: Double;
+    sx, sa1: string;
+    i, j: Integer;
+    tab: array [1 .. 8] of Byte absolute x;
+    eps: array [1 .. 8] of Byte;
+    epsx: Double absolute eps;
+    epsw: Word;
+    digits, rev_digits: char_tab;
+    ix: interval_double;
+    sep: Char;
+  begin
+    sa1 := sa;
+    if FormatSettings.DecimalSeparator = ',' then
+      sep := ','
+    else
+      sep := '.';
+    if (Pos('.', sa1) > 0) and (FormatSettings.DecimalSeparator = ',') then
+      sa1[Pos('.', sa1)] := ',';
+    x := StrToFloat(sa1);
+    if (sa1[1] <> ' ') then
+      Insert('+', sa1, 1);
+    sx := Copy(sa1, Pos('E', sa1) + 1, Length(sa1) - Pos('E', sa1));
+    sa1 := Copy(sa1, 1, Pos('E', sa1) - 1);
+    j := StrToInt(sx);
+    if j > 0 then
+      for i := 1 to j do
+      begin
+        Insert(sep, sa1, Pos(sep, sa1) + 2);
+        Delete(sa1, Pos(sep, sa1), 1);
+        if Pos(sep, sa1) = Length(sa1) then
+          sa1 := sa1 + '0'
+      end
+    else if j < 0 then
+      for i := j to -1 do
+      begin
+        Insert(sep, sa1, Pos(sep, sa1) - 1);
+        Delete(sa1, Pos(sep, sa1) + 2, 1);
+        if sa1[2] = sep then
+          Insert('0', sa1, 2)
+      end;
+    while (sa1[Length(sa1)] = '0') and (sa1[Length(sa1) - 1] <> sep) do
+      sa1 := Copy(sa1, 1, Length(sa1) - 1);
+    for i := 1 to 8 do
+      for j := 7 downto 0 do
+        if tab[i] and bit[j] = bit[j] then
+          digits[8 * i - j] := '1'
+        else
+          digits[8 * i - j] := '0';
+    for i := 1 to 8 do
+      for j := 1 to 8 do
+        rev_digits[8 * (i - 1) + j] := digits[64 - 8 * i + j];
+    sx := '0' + sep + '0000000000000000000000000000000000000000000000000000';
+    to_fixed_point_Win64(rev_digits, sx);
+    if sa1 = sx then
+    begin
+      ix.a := x;
       ix.b := x
     end
-  end;
-  Result.a := ix.a;
-  Result.b := ix.b
-end { int_read_Win64 };
+    else
+    begin
+      for i := 13 to 64 do
+        rev_digits[i] := '0';
+      rev_digits[1] := '0';
+      epsw := 0;
+      j := 1;
+      for i := 10 downto 2 do
+      begin
+        if rev_digits[i] = '1' then
+          epsw := epsw + j;
+        j := 2 * j
+      end;
+      epsw := epsw - 13;
+      for i := 2 to 9 do
+      begin
+        j := j div 2;
+        if epsw div j = 1 then
+        begin
+          rev_digits[i] := '1';
+          epsw := epsw - j
+        end
+        else
+          rev_digits[i] := '0'
+      end;
+      if epsw = 1 then
+        rev_digits[10] := '1'
+      else
+        rev_digits[10] := '0';
+      for i := 1 to 8 do
+        for j := 1 to 8 do
+          digits[8 * (i - 1) + j] := rev_digits[64 - 8 * i + j];
+      for i := 1 to 8 do
+      begin
+        eps[i] := 0;
+        for j := 1 to 8 do
+          if digits[8 * (i - 1) + j] = '1' then
+            eps[i] := eps[i] or bit[8 - j]
+      end;
+      px := x - epsx;
+      nx := x + epsx;
+      i := Length(sa1) - Pos(sep, sa1);
+      j := Length(sx) - Pos(sep, sx);
+      if j > i then
+        i := j;
+      while Length(sa1) - Pos(sep, sa1) < i do
+        sa1 := sa1 + '0';
+      while Length(sx) - Pos(sep, sx) < i do
+        sx := sx + '0';
+      i := Pos(sep, sa1);
+      j := Pos(sep, sx);
+      if j > i then
+        i := j;
+      while Pos(sep, sa1) < i do
+        Insert('0', sa1, 2);
+      while Pos(sep, sx) < i do
+        Insert('0', sx, 2);
+      if sx[1] = '+' then
+        if sa1 < sx then
+        begin
+          ix.a := px;
+          ix.b := x
+        end
+        else
+        begin
+          ix.a := x;
+          ix.b := nx
+        end
+      else if sa1 < sx then
+      begin
+        ix.a := x;
+        ix.b := nx
+      end
+      else
+      begin
+        ix.a := px;
+        ix.b := x
+      end
+    end;
+    Result.a := ix.a;
+    Result.b := ix.b
+  end { int_read_Win64 };
 
-function left_read_Win64(const sa: string): Double;
+  function left_read_Win64(const sa: string): Double;
 
-var
-  int_number: interval_double;
-begin
-  int_number := int_read_Win64(sa);
-  Result := int_number.a
-end { left_read_Win64 };
+  var
+    int_number: interval_double;
+  begin
+    int_number := int_read_Win64(sa);
+    Result := int_number.a
+  end { left_read_Win64 };
 
-function right_read_Win64(const sa: string): Double;
+  function right_read_Win64(const sa: string): Double;
 
-var
-  int_number: interval_double;
-begin
-  int_number := int_read_Win64(sa);
-  Result := int_number.b
-end { right_read_Win64 };
+  var
+    int_number: interval_double;
+  begin
+    int_number := int_read_Win64(sa);
+    Result := int_number.b
+  end { right_read_Win64 };
 {$ENDIF}
-
-procedure iends_to_strings(const x: interval; out left, right: string);
+  procedure iends_to_strings(const x: interval; out left, right: string);
   procedure modify_mantissa(const i: Integer; var mantissa: string);
 
   var

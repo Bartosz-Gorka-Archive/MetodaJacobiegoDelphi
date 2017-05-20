@@ -64,6 +64,7 @@
 			<DCCReference Include="IntervalArithmetic32and64.pas"/>
 			<DCCReference Include="JacobiEquInterval.pas"/>
 			<DCCReference Include="MyIntervalType.pas"/>
+			<None Include="MetodaJacobiego_Project.todo"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
