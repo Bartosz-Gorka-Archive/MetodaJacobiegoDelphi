@@ -97,13 +97,13 @@ begin
         for i := 1 to n do
         begin
           r := iabs(a[i, khh]);
-          if (r > max) and (x1[i] = 0) then
+          if (r > max) and containtZero(x1[i]) then
           begin
             max := r;
             ih := i
           end
         end;
-        if max = 0 then
+        if containtZero(max) then
           st := 2
         else
         begin
@@ -156,7 +156,7 @@ begin
                 r := iabs(x1[i]);
                 if max < r then
                   max := r;
-                if max <> 0 then
+                if not containtZero(max) then
                   if iabs(x[i] - x1[i]) / max >= eps then
                     cond := false until (i = n) or not cond;
                 for i := 1 to n do
