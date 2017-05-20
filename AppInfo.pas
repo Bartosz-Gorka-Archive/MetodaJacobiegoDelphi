@@ -10,13 +10,13 @@ uses
 type
   TApplicationData = class(TForm)
     LabelInfo: TLabel;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    procedure Label6Click(Sender: TObject);
+    LabelTitle: TLabel;
+    LabelAuthor: TLabel;
+    LabelName: TLabel;
+    LabelGroup: TLabel;
+    LabelIndex: TLabel;
+    LabelURL: TLabel;
+    procedure LabelURLClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -30,7 +30,8 @@ implementation
 
 {$R *.dfm}
 
-procedure TApplicationData.Label6Click(Sender: TObject);
+{ OPEN SITE URL ON LABEL CLICK }
+procedure TApplicationData.LabelURLClick(Sender: TObject);
 begin
   ShellExecute(Application.Handle, PChar('open'), PChar('www.bartosz-gorka.pl'), nil, nil, SW_SHOW);
 end;

@@ -596,8 +596,8 @@ begin
   begin
     if (StrToInt(ExampleNumber.Text) < 1) then
       ExampleNumber.Text := '1';
-    if (StrToInt(ExampleNumber.Text) > 3) then
-      ExampleNumber.Text := '3';
+    if (StrToInt(ExampleNumber.Text) > 7) then
+      ExampleNumber.Text := '7';
   end
   else
     ExampleNumber.Text := '1';

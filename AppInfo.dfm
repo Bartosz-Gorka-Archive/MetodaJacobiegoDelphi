@@ -29,7 +29,7 @@ object ApplicationData: TApplicationData
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Label1: TLabel
+  object LabelTitle: TLabel
     Left = 17
     Top = 34
     Width = 420
@@ -42,7 +42,7 @@ object ApplicationData: TApplicationData
     Font.Style = [fsItalic]
     ParentFont = False
   end
-  object Label2: TLabel
+  object LabelAuthor: TLabel
     Left = 8
     Top = 88
     Width = 66
@@ -55,7 +55,7 @@ object ApplicationData: TApplicationData
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Label3: TLabel
+  object LabelName: TLabel
     Left = 17
     Top = 114
     Width = 98
@@ -68,7 +68,7 @@ object ApplicationData: TApplicationData
     Font.Style = []
     ParentFont = False
   end
-  object Label4: TLabel
+  object LabelGroup: TLabel
     Left = 17
     Top = 134
     Width = 106
@@ -81,7 +81,7 @@ object ApplicationData: TApplicationData
     Font.Style = []
     ParentFont = False
   end
-  object Label5: TLabel
+  object LabelIndex: TLabel
     Left = 17
     Top = 153
     Width = 84
@@ -94,7 +94,7 @@ object ApplicationData: TApplicationData
     Font.Style = []
     ParentFont = False
   end
-  object Label6: TLabel
+  object LabelURL: TLabel
     Left = 160
     Top = 193
     Width = 139
@@ -107,6 +107,6 @@ object ApplicationData: TApplicationData
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    OnClick = Label6Click
+    OnClick = LabelURLClick
   end
 end

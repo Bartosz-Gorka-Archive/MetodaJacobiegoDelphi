@@ -17,40 +17,43 @@ procedure JacobiInterval(n: Integer; var a: intervalMatrix;
   var b: intervalVector; mit: Integer; eps: Extended; var x: intervalVector;
   var it, st: Integer);
 { --------------------------------------------------------------------------- }
-{}
-{ The procedure Jacobi solves a system of linear equations by Jacobi's }
-{ iterative method. }
-{ Data: }
-{ n   - number of equations = number of unknowns, }
-{ a   - a two-dimensional array containing elements of the matrix of the }
-{ system (changed on exit), }
-{ b   - a one-dimensional array containing free terms of the system }
-{ (changed on exit), }
-{ mit - maximum number of iterations in Jacobi's method, }
-{ eps - relative accuracy of the solution, }
-{ x   - an array containing an initial approximation to the solution }
-{ (changed on exit). }
-{ Results: }
-{ x  - an array containing the solution, }
-{ it - number of iterations. }
-{ Other parameters: }
-{ st - a variable which within the procedure Jacobi is assigned the }
-{ value of: }
-{ 1, if n<1, }
-{ 2, if the matrix of the system is singular, }
-{ 3, if the desired accuracy of the solution is not achieved in }
-{ mit iteration steps, }
-{ 4, if division by an interval containing 0. }
-{ 0, otherwise. }
-{ Note: If st=1 or st=2, then the elements of array x are not }
-{ changed on exit. If st=3, then x contains the last }
-{ approximation to the solution. }
-{ Unlocal identifiers: }
-{ vector - a type identifier of extended array [q1..qn], where q1<=1 and }
-{ qn>=n, }
-{ matrix - a type identifier of extended array [q1..qn,q1..qn], where }
-{ q1<=1 and qn>=n. }
-{ }
+{ The procedure Jacobi solves a system of linear equations by Jacobi's        }
+{   iterative method.                                                         }
+{                                                                             }
+{ Data:                                                                       }
+{   n   - number of equations = number of unknowns,                           }
+{   a   - a two-dimensional array containing elements of the matrix of the    }
+{         system (changed on exit),                                           }
+{   b   - a one-dimensional array containing free terms of the system         }
+{         (changed on exit),                                                  }
+{   mit - maximum number of iterations in Jacobi's method,                    }
+{   eps - relative accuracy of the solution,                                  }
+{   x   - an array containing an initial approximation to the solution        }
+{         (changed on exit).                                                  }
+{                                                                             }
+{ Results:                                                                    }
+{   x   - an array containing the solution,                                   }
+{   it  - number of iterations.                                               }
+{                                                                             }
+{ Other parameters:                                                           }
+{   st  - a variable which within the procedure Jacobi is assigned the        }
+{         value of:                                                           }
+{   1, if n<1,                                                                }
+{   2, if the matrix of the system is singular,                               }
+{   3, if the desired accuracy of the solution is not achieved in             }
+{       mit iteration steps,                                                  }
+{   4, if division by an interval containing 0,                               }
+{   0, otherwise.                                                             }
+{                                                                             }
+{ Note:                                                                       }
+{   If st=1 or st=2, then the elements of array x are not changed on exit.    }
+{   If st=3, then x contains the last approximation to the solution.          }
+{                                                                             }
+{ Unlocal identifiers:                                                        }
+{   intervalVector - a type identifier of interval array [q1..qn],            }
+{                    where q1<=1 and qn>=n,                                   }
+{   intervalMatrix - a type identifier of interval array [q1..qn, q1..qn],    }
+{                    where q1<=1 and qn>=n.                                   }
 { --------------------------------------------------------------------------- }
 var
   i, ih, k, kh, khh, lz1, lz2: Integer;
@@ -67,7 +70,6 @@ begin
     cond := true;
     for k := 1 to n do
       x1[k] := 0;
-    WriteLn(x1[1].a);
     repeat
       lz1 := 0;
       khh := 0;
@@ -164,21 +166,6 @@ begin
 
           end
         end;
-
-        Write('eps = ');
-        WriteLn(eps);
-        Write('mit = ');
-        WriteLn(mit);
-        for i := 0 to n do
-        begin
-          Write(x[i].a);
-          WriteLn(x[i].b);
-        end;
-
-        Write('st = ');
-        WriteLn(st);
-        Write('it = ');
-        WriteLn(it);
       end;
 
 end.

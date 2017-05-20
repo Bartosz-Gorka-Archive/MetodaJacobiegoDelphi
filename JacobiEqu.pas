@@ -14,7 +14,7 @@ implementation
 procedure Jacobi(n: Integer; var a: matrix; var b: vector; mit: Integer;
   eps: Extended; var x: vector; var it, st: Integer);
 { --------------------------------------------------------------------------- }
-{ }
+{                                                                             }
 { The procedure Jacobi solves a system of linear equations by Jacobi's        }
 { iterative method.                                                           }
 { Data:                                                                       }
@@ -24,29 +24,29 @@ procedure Jacobi(n: Integer; var a: matrix; var b: vector; mit: Integer;
 { b   - a one-dimensional array containing free terms of the system           }
 { (changed on exit),                                                          }
 { mit - maximum number of iterations in Jacobi's method,                      }
-{ eps - relative accuracy of the solution, }
-{ x   - an array containing an initial approximation to the solution }
-{ (changed on exit). }
-{ Results: }
-{ x  - an array containing the solution, }
-{ it - number of iterations. }
-{ Other parameters: }
-{ st - a variable which within the procedure Jacobi is assigned the }
-{ value of: }
-{ 1, if n<1, }
-{ 2, if the matrix of the system is singular, }
-{ 3, if the desired accuracy of the solution is not achieved in }
-{ mit iteration steps, }
-{ 0, otherwise. }
-{ Note: If st=1 or st=2, then the elements of array x are not }
-{ changed on exit. If st=3, then x contains the last }
-{ approximation to the solution. }
-{ Unlocal identifiers: }
-{ vector - a type identifier of extended array [q1..qn], where q1<=1 and }
-{ qn>=n, }
-{ matrix - a type identifier of extended array [q1..qn,q1..qn], where }
-{ q1<=1 and qn>=n. }
-{ }
+{ eps - relative accuracy of the solution,                                    }
+{ x   - an array containing an initial approximation to the solution          }
+{ (changed on exit).                                                          }
+{ Results:                                                                    }
+{ x  - an array containing the solution,                                      }
+{ it - number of iterations.                                                  }
+{ Other parameters:                                                           }
+{ st - a variable which within the procedure Jacobi is assigned the           }
+{ value of:                                                                   }
+{ 1, if n<1,                                                                  }
+{ 2, if the matrix of the system is singular,                                 }
+{ 3, if the desired accuracy of the solution is not achieved in               }
+{ mit iteration steps,                                                        }
+{ 0, otherwise.                                                               }
+{ Note: If st=1 or st=2, then the elements of array x are not                 }
+{ changed on exit. If st=3, then x contains the last                          }
+{ approximation to the solution.                                              }
+{ Unlocal identifiers:                                                        }
+{ vector - a type identifier of extended array [q1..qn], where q1<=1 and      }
+{ qn>=n,                                                                      }
+{ matrix - a type identifier of extended array [q1..qn,q1..qn], where         }
+{ q1<=1 and qn>=n.                                                            }
+{                                                                             }
 { --------------------------------------------------------------------------- }
 var
   i, ih, k, kh, khh, lz1, lz2: Integer;
@@ -150,20 +150,6 @@ begin
             until (st = 3) or cond
           end
         end;
-
-        Write('eps = ');
-        WriteLn(eps);
-        Write('mit = ');
-        WriteLn(mit);
-        WriteLn(x[0]);
-         WriteLn(x[1]);
-          WriteLn(x[2]);
-           WriteLn(x[3]);
-            WriteLn(x[4]);
-        Write('st = ');
-        WriteLn(st);
-        Write('it = ');
-        WriteLn(it);
       end;
 
 end.
