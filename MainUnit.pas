@@ -349,6 +349,42 @@ begin
         x[3] := -1;
         x[4] := 0.9;
       end;
+    4:
+      begin
+        floatAritmetic := TRUE;
+        n := 4;
+        SetLength(a, n + 1);
+        SetLength(b, n + 1);
+        SetLength(x, n + 1);
+        for I := 0 to n + 1 do
+          SetLength(a[I], n + 1);
+        a[1, 1] := 0;
+        a[1, 2] := 0;
+        a[1, 3] := 1;
+        a[1, 4] := 2;
+        a[2, 1] := 2;
+        a[2, 2] := 1;
+        a[2, 3] := 0;
+        a[2, 4] := 2;
+        a[3, 1] := 7;
+        a[3, 2] := 3;
+        a[3, 3] := 0;
+        a[3, 4] := 1;
+        a[4, 1] := 0;
+        a[4, 2] := 5;
+        a[4, 3] := 0;
+        a[4, 4] := 0;
+        b[1] := 1;
+        b[2] := 1;
+        b[3] := 1;
+        b[4] := 1;
+        mit := 100;
+        eps := Exp(-14);
+        x[1] := 0;
+        x[2] := 0;
+        x[3] := 0;
+        x[4] := 0;
+      end
   else
     begin
       ShowMessage('B³¹d przy wczytywaniu przyk³adu!');
