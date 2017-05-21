@@ -701,30 +701,33 @@ end;
 
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
 begin
-  ButtonSolve.Enabled := FALSE;
-  ButtonSolve.Caption := 'Liczê...';
+  try
+    ButtonSolve.Enabled := FALSE;
+    ButtonSolve.Caption := 'Liczê...';
 
-  if (RadioButtonZmienno.Checked) then
-    floatAritmetic := TRUE
-  else
-    floatAritmetic := FALSE;
+    if (RadioButtonZmienno.Checked) then
+      floatAritmetic := TRUE
+    else
+      floatAritmetic := FALSE;
 
-  ReadFromGrids();
+    ReadFromGrids();
 
-  if (floatAritmetic) then
-  begin
-    Jacobi(n, a, b, mit, eps, x, it, st);
-    StoreResults();
-  end
-  else if (correct) then
-  begin
-    JacobiInterval(n, ai, bi, mit, eps, xi, it, st);
-    StoreResults();
+    if (floatAritmetic) then
+    begin
+      Jacobi(n, a, b, mit, eps, x, it, st);
+      StoreResults();
+    end
+    else if (correct) then
+    begin
+      JacobiInterval(n, ai, bi, mit, eps, xi, it, st);
+      StoreResults();
+    end;
+
+  finally
+    ClearData();
+    ButtonSolve.Enabled := TRUE;
+    ButtonSolve.Caption := '&Oblicz';
   end;
-
-  ClearData();
-  ButtonSolve.Enabled := TRUE;
-  ButtonSolve.Caption := '&Oblicz';
 end;
 
 procedure TMainForm.ClearData();
