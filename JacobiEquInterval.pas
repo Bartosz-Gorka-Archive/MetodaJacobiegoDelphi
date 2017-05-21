@@ -3,9 +3,7 @@ unit JacobiEquInterval;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyIntervalType,
-  IntervalArithmetic32and64;
+  MyIntervalType, IntervalArithmetic32and64;
 
 procedure JacobiInterval(n: Integer; var a: intervalMatrix;
   var b: intervalVector; mit: Integer; eps: Extended; var x: intervalVector;
@@ -17,8 +15,8 @@ procedure JacobiInterval(n: Integer; var a: intervalMatrix;
   var b: intervalVector; mit: Integer; eps: Extended; var x: intervalVector;
   var it, st: Integer);
 { --------------------------------------------------------------------------- }
-{ The procedure Jacobi solves a system of linear equations by Jacobi's        }
-{   iterative method.                                                         }
+{ The procedure JacobiInterval solves a system of linear equations            }
+{ in interval arithmetic by Jacobi's iterative method.                        }
 {                                                                             }
 { Data:                                                                       }
 {   n   - number of equations = number of unknowns,                           }
@@ -50,6 +48,7 @@ procedure JacobiInterval(n: Integer; var a: intervalMatrix;
 {   If st=3, then x contains the last approximation to the solution.          }
 {                                                                             }
 { Unlocal identifiers:                                                        }
+{   interval - a record type with var a, b : Extended;                        }
 {   intervalVector - a type identifier of interval array [q1..qn],            }
 {                    where q1<=1 and qn>=n,                                   }
 {   intervalMatrix - a type identifier of interval array [q1..qn, q1..qn],    }
@@ -66,21 +65,25 @@ begin
   else
   begin
     SetLength(x1, n + 1);
+
     st := 0;
     cond := true;
     for k := 1 to n do
-      x1[k] := 0;
+    begin
+      x1[k].a := 0;
+      x1[k].b := 0;
+    end;
     repeat
       lz1 := 0;
       khh := 0;
       for k := 1 to n do
       begin
         lz2 := 0;
-        if a[k, k] = 0 then
+        if containtZero(a[k, k]) then
         begin
           kh := k;
           for i := 1 to n do
-            if a[i, k] = 0 then
+            if containtZero(a[i, k]) then
               lz2 := lz2 + 1;
           if lz2 > lz1 then
           begin
@@ -93,7 +96,9 @@ begin
         cond := false
       else
       begin
-        max := 0;
+        max.a := 0;
+        max.b := 0;
+
         for i := 1 to n do
         begin
           r := iabs(a[i, khh]);

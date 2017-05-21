@@ -349,6 +349,246 @@ begin
         x[3] := -1;
         x[4] := 0.9;
       end;
+    4:
+      begin
+        floatAritmetic := FALSE;
+        n := 4;
+        SetLength(ai, n + 1);
+        SetLength(bi, n + 1);
+        SetLength(xi, n + 1);
+        for I := 0 to n + 1 do
+          SetLength(ai[I], n + 1);
+        ai[1, 1].a := 0;
+        ai[1, 1].b := 0;
+        ai[1, 2].a := 0;
+        ai[1, 2].b := 0;
+        ai[1, 3].a := 1;
+        ai[1, 3].b := 1;
+        ai[1, 4].a := 2;
+        ai[1, 4].b := 2;
+        ai[2, 1].a := 2;
+        ai[2, 1].b := 2;
+        ai[2, 2].a := 1;
+        ai[2, 2].b := 1;
+        ai[2, 3].a := 0;
+        ai[2, 3].b := 0;
+        ai[2, 4].a := 2;
+        ai[2, 4].b := 2;
+        ai[3, 1].a := 7;
+        ai[3, 1].b := 7;
+        ai[3, 2].a := 3;
+        ai[3, 2].b := 3;
+        ai[3, 3].a := 0;
+        ai[3, 3].b := 0;
+        ai[3, 4].a := 1;
+        ai[3, 4].b := 1;
+        ai[4, 1].a := 0;
+        ai[4, 1].b := 0;
+        ai[4, 2].a := 5;
+        ai[4, 2].b := 5;
+        ai[4, 3].a := 0;
+        ai[4, 3].b := 0;
+        ai[4, 4].a := 0;
+        ai[4, 4].b := 0;
+        bi[1].a := 1;
+        bi[1].b := 1;
+        bi[2].b := 1;
+        bi[2].a := 1;
+        bi[3].a := 1;
+        bi[3].b := 1;
+        bi[4].a := 1;
+        bi[4].b := 1;
+        mit := 100;
+        eps := Exp(-14);
+        xi[1].a := 0;
+        xi[1].b := 0;
+        xi[2].a := 0;
+        xi[2].b := 0;
+        xi[3].a := 0;
+        xi[3].b := 0;
+        xi[4].a := 0;
+        xi[4].b := 0;
+      end;
+    5:
+      begin
+        floatAritmetic := FALSE;
+        n := 4;
+        SetLength(ai, n + 1);
+        SetLength(bi, n + 1);
+        SetLength(xi, n + 1);
+        for I := 0 to n + 1 do
+          SetLength(ai[I], n + 1);
+        ai[1, 1].a := -12.235;
+        ai[1, 1].b := -12.235;
+        ai[1, 2].a := 1.229;
+        ai[1, 2].b := 1.229;
+        ai[1, 3].a := 0.5597;
+        ai[1, 3].b := 0.5597;
+        ai[1, 4].a := 0;
+        ai[1, 4].b := 0;
+        ai[2, 1].a := 1.229;
+        ai[2, 1].b := 1.229;
+        ai[2, 2].a := -6.78;
+        ai[2, 2].b := -6.78;
+        ai[2, 3].a := 0.765;
+        ai[2, 3].b := 0.765;
+        ai[2, 4].a := 0;
+        ai[2, 4].b := 0;
+        ai[3, 1].a := 0.5597;
+        ai[3, 1].b := 0.5597;
+        ai[3, 2].a := 0.765;
+        ai[3, 2].b := 0.765;
+        ai[3, 3].a := 91.0096;
+        ai[3, 3].b := 91.0096;
+        ai[3, 4].a := 2;
+        ai[3, 4].b := 2;
+        ai[4, 1].a := 0;
+        ai[4, 1].b := 0;
+        ai[4, 2].a := 0;
+        ai[4, 2].b := 0;
+        ai[4, 3].a := -2;
+        ai[4, 3].b := -2;
+        ai[4, 4].a := 5.5;
+        ai[4, 4].b := 5.5;
+        bi[1].a := 0.956;
+        bi[1].b := 0.956;
+        bi[2].a := 51.5603;
+        bi[2].b := 51.5603;
+        bi[3].a := 2;
+        bi[3].b := 2;
+        bi[4].a := 5.8;
+        bi[4].b := 5.8;
+        mit := 10;
+        eps := Exp(-14);
+        xi[1].a := 2;
+        xi[1].b := 2;
+        xi[2].a := 0.75;
+        xi[2].b := 0.75;
+        xi[3].a := -1;
+        xi[3].b := -1;
+        xi[4].a := 0.9;
+        xi[4].b := 0.9;
+      end;
+    6:
+      begin
+        floatAritmetic := FALSE;
+        n := 4;
+        SetLength(ai, n + 1);
+        SetLength(bi, n + 1);
+        SetLength(xi, n + 1);
+        for I := 0 to n + 1 do
+          SetLength(ai[I], n + 1);
+        ai[1, 1].a := -12.235;
+        ai[1, 1].b := -12.235;
+        ai[1, 2].a := 1.229;
+        ai[1, 2].b := 1.229;
+        ai[1, 3].a := 0.5597;
+        ai[1, 3].b := 0.5597;
+        ai[1, 4].a := 0;
+        ai[1, 4].b := 0;
+        ai[2, 1].a := 1.229;
+        ai[2, 1].b := 1.229;
+        ai[2, 2].a := -6.78;
+        ai[2, 2].b := -6.78;
+        ai[2, 3].a := 0.765;
+        ai[2, 3].b := 0.765;
+        ai[2, 4].a := 0;
+        ai[2, 4].b := 0;
+        ai[3, 1].a := 0.5597;
+        ai[3, 1].b := 0.5597;
+        ai[3, 2].a := 0.765;
+        ai[3, 2].b := 0.765;
+        ai[3, 3].a := 91.0096;
+        ai[3, 3].b := 91.0096;
+        ai[3, 4].a := 2;
+        ai[3, 4].b := 2;
+        ai[4, 1].a := 0;
+        ai[4, 1].b := 0;
+        ai[4, 2].a := 0;
+        ai[4, 2].b := 0;
+        ai[4, 3].a := -2;
+        ai[4, 3].b := -2;
+        ai[4, 4].a := 5.5;
+        ai[4, 4].b := 5.5;
+        bi[1].a := 0.956;
+        bi[1].b := 0.956;
+        bi[2].a := 51.5603;
+        bi[2].b := 51.5603;
+        bi[3].a := 2;
+        bi[3].b := 2;
+        bi[4].a := 5.8;
+        bi[4].b := 5.8;
+        mit := 5;
+        eps := Exp(-14);
+        xi[1].a := 2;
+        xi[1].b := 2;
+        xi[2].a := 0.75;
+        xi[2].b := 0.75;
+        xi[3].a := -1;
+        xi[3].b := -1;
+        xi[4].a := 0.9;
+        xi[4].b := 0.9;
+      end;
+    7:
+      begin
+        floatAritmetic := FALSE;
+        n := 4;
+        SetLength(ai, n + 1);
+        SetLength(bi, n + 1);
+        SetLength(xi, n + 1);
+        for I := 0 to n + 1 do
+          SetLength(ai[I], n + 1);
+        ai[1, 1].a := -12.235;
+        ai[1, 1].b := -12.235;
+        ai[1, 2].a := 1.229;
+        ai[1, 2].b := 1.229;
+        ai[1, 3].a := 0.5597;
+        ai[1, 3].b := 0.5597;
+        ai[1, 4].a := 0;
+        ai[1, 4].b := 0;
+        ai[2, 1].a := -5.229;
+        ai[2, 1].b := 1.229;
+        ai[2, 2].a := -2;
+        ai[2, 2].b := 0;
+        ai[2, 3].a := 0;
+        ai[2, 3].b := 0;
+        ai[2, 4].a := 0;
+        ai[2, 4].b := 0;
+        ai[3, 1].a := 0;
+        ai[3, 1].b := 0;
+        ai[3, 2].a := 0;
+        ai[3, 2].b := 0;
+        ai[3, 3].a := 91.0096;
+        ai[3, 3].b := 91.0096;
+        ai[3, 4].a := 2;
+        ai[3, 4].b := 2;
+        ai[4, 1].a := 0;
+        ai[4, 1].b := 0;
+        ai[4, 2].a := 0;
+        ai[4, 2].b := 0;
+        ai[4, 3].a := -2;
+        ai[4, 3].b := -2;
+        ai[4, 4].a := 5.5;
+        ai[4, 4].b := 5.5;
+        bi[1].a := 0.956;
+        bi[1].b := 0.956;
+        bi[2].a := 51.5603;
+        bi[2].b := 51.5603;
+        bi[3].a := 2;
+        bi[3].b := 2;
+        bi[4].a := 5.8;
+        bi[4].b := 5.8;
+        mit := 5;
+        eps := Exp(-14);
+        xi[1].a := 2;
+        xi[1].b := 2;
+        xi[2].a := 0.75;
+        xi[2].b := 0.75;
+        xi[3].a := -1;
+        xi[3].b := -1;
+        xi[4].a := 0.9;
+        xi[4].b := 0.9;
+      end
   else
     begin
       ShowMessage('B³¹d przy wczytywaniu przyk³adu!');
@@ -363,24 +603,39 @@ procedure TMainForm.WriteExample();
 var
   I, j: Integer;
 begin
-  if (floatAritmetic) then
-    RadioButtonZmienno.Checked := TRUE
-  else
-    RadioButtonPrzedzialowa.Checked := TRUE;
-
   EditEpsilon.Text := IntToStr(14);
   IterNumber.Text := IntToStr(mit);
   VarNumber.Text := IntToStr(n);
 
-  for j := 1 to StringGridStartVal.ColCount - 1 do
-    StringGridStartVal.Cells[j, 1] := FloatToStr(x[j]);
-
-  for I := 1 to StringGridEquations.RowCount - 1 do
+  if (floatAritmetic) then
   begin
-    for j := 1 to StringGridEquations.ColCount - 2 do
-      StringGridEquations.Cells[j, I] := FloatToStr(a[I, j]);
-    StringGridEquations.Cells[StringGridEquations.ColCount - 1, I] :=
-      FloatToStr(b[I]);
+    RadioButtonZmienno.Checked := TRUE;
+    for j := 1 to StringGridStartVal.ColCount - 1 do
+      StringGridStartVal.Cells[j, 1] := FloatToStr(x[j]);
+
+    for I := 1 to StringGridEquations.RowCount - 1 do
+    begin
+      for j := 1 to StringGridEquations.ColCount - 2 do
+        StringGridEquations.Cells[j, I] := FloatToStr(a[I, j]);
+      StringGridEquations.Cells[StringGridEquations.ColCount - 1, I] :=
+        FloatToStr(b[I]);
+    end;
+  end
+  else
+  begin
+    RadioButtonPrzedzialowa.Checked := TRUE;
+    for j := 1 to StringGridStartVal.ColCount - 1 do
+      StringGridStartVal.Cells[j, 1] := FloatToStr(xi[j].a) + ';' +
+        FloatToStr(xi[j].b);
+
+    for I := 1 to StringGridEquations.RowCount - 1 do
+    begin
+      for j := 1 to StringGridEquations.ColCount - 2 do
+        StringGridEquations.Cells[j, I] := FloatToStr(ai[I, j].a) + ';' +
+          FloatToStr(ai[I, j].b);
+      StringGridEquations.Cells[StringGridEquations.ColCount - 1, I] :=
+        FloatToStr(bi[I].a) + ';' + FloatToStr(bi[I].b);
+    end;
   end;
 end;
 
@@ -446,35 +701,36 @@ end;
 
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
 begin
-  ButtonSolve.Enabled := FALSE;
-  ButtonSolve.Caption := 'Liczê...';
+  try
+    ButtonSolve.Enabled := FALSE;
+    ButtonSolve.Caption := 'Liczê...';
 
-  if (RadioButtonZmienno.Checked) then
-    floatAritmetic := TRUE
-  else
-    floatAritmetic := FALSE;
+    if (RadioButtonZmienno.Checked) then
+      floatAritmetic := TRUE
+    else
+      floatAritmetic := FALSE;
 
-  ReadFromGrids();
+    ReadFromGrids();
 
-  if (floatAritmetic) then
-  begin
-    Jacobi(n, a, b, mit, eps, x, it, st);
-    StoreResults();
-  end
-  else if (correct) then
-  begin
-    JacobiInterval(n, ai, bi, mit, eps, xi, it, st);
-    StoreResults();
+    if (floatAritmetic) then
+    begin
+      Jacobi(n, a, b, mit, eps, x, it, st);
+      StoreResults();
+    end
+    else if (correct) then
+    begin
+      JacobiInterval(n, ai, bi, mit, eps, xi, it, st);
+      StoreResults();
+    end;
+
+  finally
+    ClearData();
+    ButtonSolve.Enabled := TRUE;
+    ButtonSolve.Caption := '&Oblicz';
   end;
-
-  ClearData();
-  ButtonSolve.Enabled := TRUE;
-  ButtonSolve.Caption := '&Oblicz';
 end;
 
 procedure TMainForm.ClearData();
-var
-  I: Integer;
 begin
   SetLength(a, 0);
   SetLength(b, 0);
@@ -514,7 +770,8 @@ begin
       end;
     4:
       begin
-        MemoResults.Lines.Add('B£¥D - Próba dzielenia przez przedzia³ zawieraj¹cy 0 (zero).');
+        MemoResults.Lines.Add
+          ('B£¥D - Próba dzielenia przez przedzia³ zawieraj¹cy 0 (zero).');
       end;
   end;
 

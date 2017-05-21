@@ -3,8 +3,7 @@ unit JacobiEqu;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ComCtrls, StdCtrls, Grids, Clipbrd, MyVarType;
+  MyVarType;
 
 procedure Jacobi(n: Integer; var a: matrix; var b: vector; mit: Integer;
   eps: Extended; var x: vector; var it, st: Integer);
