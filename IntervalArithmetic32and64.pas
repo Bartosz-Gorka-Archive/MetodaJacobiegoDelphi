@@ -274,7 +274,6 @@ type
   end { Implicit };
 
   class operator interval.Implicit(x: Integer): interval;
-
   var
     s: string;
   begin
