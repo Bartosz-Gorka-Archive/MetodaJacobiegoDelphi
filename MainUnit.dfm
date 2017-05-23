@@ -278,7 +278,7 @@ object MainForm: TMainForm
         Height = 21
         Associate = EditEpsilon
         Min = 1
-        Max = 20
+        Max = 26
         Position = 1
         TabOrder = 5
       end

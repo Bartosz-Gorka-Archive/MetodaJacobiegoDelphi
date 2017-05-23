@@ -171,6 +171,7 @@ begin
 
           end
         end;
+        SetLength(x1, 0);
       end;
 
 end.
