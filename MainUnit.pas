@@ -709,6 +709,9 @@ end;
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
 begin
   try
+    ClearData();
+    floatAritmetic := TRUE;
+
     ButtonSolve.Enabled := FALSE;
     ButtonSolve.Caption := 'Liczê...';
 
@@ -816,11 +819,11 @@ begin
   begin
     if (StrToInt(EditEpsilon.Text) < 1) then
       EditEpsilon.Text := '1';
-    if (StrToInt(EditEpsilon.Text) > 20) then
-      EditEpsilon.Text := '20';
+    if (StrToInt(EditEpsilon.Text) > 26) then
+      EditEpsilon.Text := '26';
   end
   else
-    EditEpsilon.Text := '14';
+    EditEpsilon.Text := '16';
 end;
 
 procedure TMainForm.ExampleNumberChange(Sender: TObject);
