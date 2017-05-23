@@ -149,6 +149,7 @@ begin
             until (st = 3) or cond
           end
         end;
-      end;
 
+        SetLength(x1, 0);
+      end;
 end.

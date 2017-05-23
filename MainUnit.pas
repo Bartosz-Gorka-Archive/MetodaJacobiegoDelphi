@@ -80,7 +80,7 @@ type
 
 var
   MainForm: TMainForm;
-  n, mit, st, it: Integer;
+  eps_number, n, mit, st, it: Integer;
   eps: Extended;
   a: matrix;
   b, x: vector;
@@ -272,6 +272,7 @@ begin
         b[4] := 1;
         mit := 100;
         eps := Exp(-14);
+        eps_number := 14;
         x[1] := 0;
         x[2] := 0;
         x[3] := 0;
@@ -307,7 +308,8 @@ begin
         b[3] := 2;
         b[4] := 5.8;
         mit := 10;
-        eps := Exp(-14);
+        eps := Exp(-16);
+        eps_number := 16;
         x[1] := 2;
         x[2] := 0.75;
         x[3] := -1;
@@ -343,7 +345,8 @@ begin
         b[3] := 2;
         b[4] := 5.8;
         mit := 100;
-        eps := Exp(-14);
+        eps := Exp(-16);
+        eps_number := 16;
         x[1] := 2;
         x[2] := 0.75;
         x[3] := -1;
@@ -400,6 +403,7 @@ begin
         bi[4].b := 1;
         mit := 100;
         eps := Exp(-14);
+        eps_number := 14;
         xi[1].a := 0;
         xi[1].b := 0;
         xi[2].a := 0;
@@ -460,6 +464,7 @@ begin
         bi[4].b := 5.8;
         mit := 10;
         eps := Exp(-14);
+        eps_number := 14;
         xi[1].a := 2;
         xi[1].b := 2;
         xi[2].a := 0.75;
@@ -520,6 +525,7 @@ begin
         bi[4].b := 5.8;
         mit := 5;
         eps := Exp(-14);
+        eps_number := 14;
         xi[1].a := 2;
         xi[1].b := 2;
         xi[2].a := 0.75;
@@ -580,6 +586,7 @@ begin
         bi[4].b := 5.8;
         mit := 5;
         eps := Exp(-14);
+        eps_number := 14;
         xi[1].a := 2;
         xi[1].b := 2;
         xi[2].a := 0.75;
@@ -603,7 +610,7 @@ procedure TMainForm.WriteExample();
 var
   I, j: Integer;
 begin
-  EditEpsilon.Text := IntToStr(14);
+  EditEpsilon.Text := IntToStr(eps_number);
   IterNumber.Text := IntToStr(mit);
   VarNumber.Text := IntToStr(n);
 
