@@ -1,7 +1,5 @@
 unit MainUnit;
 
-{$N+,E-}
-
 interface
 
 uses
@@ -92,12 +90,13 @@ var
   correct: Boolean;
 
 const
-  CRLF = #13#10;
+  CRLF = #13#10; { SPACE }
 
 implementation
 
 {$R *.dfm}
 
+{ CLEAR STRING-GRIDS FROM NON NUMBERS AND ALLOWED CHAR }
 procedure TMainForm.RemoveNonNumbersASCIIFromStart(var Str: String;
   floatAr: Boolean);
 begin
@@ -110,6 +109,7 @@ begin
     Str := TRegEx.Replace(Str, ';', '');
 end;
 
+{ READ FROM STRING-GRIDS TO MEMORY }
 procedure TMainForm.ReadFromGrids();
 var
   I, j: Integer;
@@ -236,12 +236,13 @@ begin
   end;
 end;
 
+{ EXAMPLES STORED IN MEMORY }
 procedure TMainForm.ImportExample(Number: Integer);
 var
   I: Integer;
 begin
   case Number of
-    1:
+    1: // FROM BOOK
       begin
         floatAritmetic := TRUE;
         n := 4;
@@ -278,7 +279,7 @@ begin
         x[3] := 0;
         x[4] := 0;
       end;
-    2:
+    2: // FROM BOOK
       begin
         floatAritmetic := TRUE;
         n := 4;
@@ -315,7 +316,7 @@ begin
         x[3] := -1;
         x[4] := 0.9;
       end;
-    3:
+    3: // FROM BOOK
       begin
         floatAritmetic := TRUE;
         n := 4;
@@ -463,8 +464,8 @@ begin
         bi[4].a := 5.8;
         bi[4].b := 5.8;
         mit := 10;
-        eps := Exp(-14);
-        eps_number := 14;
+        eps := Exp(-16);
+        eps_number := 16;
         xi[1].a := 2;
         xi[1].b := 2;
         xi[2].a := 0.75;
@@ -524,8 +525,8 @@ begin
         bi[4].a := 5.8;
         bi[4].b := 5.8;
         mit := 5;
-        eps := Exp(-14);
-        eps_number := 14;
+        eps := Exp(-16);
+        eps_number := 16;
         xi[1].a := 2;
         xi[1].b := 2;
         xi[2].a := 0.75;
@@ -606,6 +607,7 @@ begin
 
 end;
 
+{ WRITE EXAMPLE FROM MEMORY TO STRING-GRIDS }
 procedure TMainForm.WriteExample();
 var
   I, j: Integer;
@@ -646,6 +648,7 @@ begin
   end;
 end;
 
+{ DISPLAY VALUES IN STRING-GRIDS, ROW AND COLUMNS TITLE }
 procedure TMainForm.PrepareStringGrids(Clear: Boolean);
 var
   I, j: Integer;
@@ -677,17 +680,19 @@ begin
   end;
 end;
 
-{ CLEAR RESULTS IN MEMORESULTS }
+{ OPEN APPLICATION DATA FORM }
 procedure TMainForm.ApplicationClick(Sender: TObject);
 begin
   AppInfo.ApplicationData.Show();
 end;
 
+{ PROCEDURE ON CLICK CLEAR BUTTON }
 procedure TMainForm.ButtonClearClick(Sender: TObject);
 begin
   PrepareStringGrids(TRUE);
 end;
 
+{ PROCEDURE ON CLICK CLEAR RESULTS }
 procedure TMainForm.ButtonClearResultsClick(Sender: TObject);
 begin
   MemoResults.Clear;
@@ -700,12 +705,14 @@ begin
   MemoResults.CopyToClipboard;
 end;
 
+{ PROCEDURE ON CLICK IMPORT EXAMPLES FROM MEMORY TO APPLICATION }
 procedure TMainForm.ButtonReadExampleClick(Sender: TObject);
 begin
   ImportExample(StrToInt(ExampleNumber.Text));
   WriteExample();
 end;
 
+{ PROCEDURE SOLVE PROBLEM }
 procedure TMainForm.ButtonSolveClick(Sender: TObject);
 begin
   try
@@ -740,6 +747,7 @@ begin
   end;
 end;
 
+{ CLEAR ARRAYS }
 procedure TMainForm.ClearData();
 begin
   SetLength(a, 0);
@@ -750,6 +758,7 @@ begin
   SetLength(xi, 0);
 end;
 
+{ DISPLAY RESULTS TO USER }
 procedure TMainForm.StoreResults();
 var
   I: Integer;
@@ -775,7 +784,7 @@ begin
     3:
       begin
         MemoResults.Lines.Add('CZÊŒCIOWY B£¥D - Wymagana dok³adnoœæ rozwi¹zania'
-          + ' niezosta³a osi¹gniêta po ' + Format('%d', [mit]) +
+          + ' nie zosta³a osi¹gniêta po ' + Format('%d', [mit]) +
           ' iteracjach.');
       end;
     4:
@@ -812,7 +821,7 @@ begin
   MainForm.Close();
 end;
 
-{ OPEN HELP FORM WITH INFORMATIONS HOW TO USE A PROGRAM }
+{ CHANGE PRECISSION }
 procedure TMainForm.EditEpsilonChange(Sender: TObject);
 begin
   if (EditEpsilon.Text <> '') then
@@ -826,6 +835,7 @@ begin
     EditEpsilon.Text := '16';
 end;
 
+{ CHANGE NUMBER OF EXAMPLES }
 procedure TMainForm.ExampleNumberChange(Sender: TObject);
 begin
   if (ExampleNumber.Text <> '') then
@@ -839,16 +849,19 @@ begin
     ExampleNumber.Text := '1';
 end;
 
+{ PROCEDURE CREATE FORM }
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   PrepareStringGrids(FALSE);
 end;
 
+{ OPEN HELP FORM WITH INFORMATIONS HOW TO USE A PROGRAM }
 procedure TMainForm.HelpOptionClick(Sender: TObject);
 begin
   HelpUnit.HelpForm.Show();
 end;
 
+{ CHANGE NUMBER OF MIT }
 procedure TMainForm.IterNumberChange(Sender: TObject);
 begin
   if (IterNumber.Text <> '') then
@@ -860,6 +873,7 @@ begin
     IterNumber.Text := '1';
 end;
 
+{ CHANGE VARIABLE NUMBER }
 procedure TMainForm.VarNumberChange(Sender: TObject);
 begin
   if (VarNumber.Text <> '') then
@@ -874,6 +888,7 @@ begin
   PrepareStringGrids(FALSE);
 end;
 
+{ RESIZE GRIDS }
 procedure TMainForm.ResizeGrids(value: Integer);
 begin
   StringGridEquations.ColCount := value + 2;
