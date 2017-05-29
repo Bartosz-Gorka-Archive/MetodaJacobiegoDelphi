@@ -90,7 +90,7 @@ var
   correct: Boolean;
 
 const
-  CRLF = #13#10; { SPACE }
+  CRLF = #13#10; { \n sign }
 
 implementation
 
@@ -762,6 +762,7 @@ end;
 procedure TMainForm.StoreResults();
 var
   I: Integer;
+  left, right : String;
 begin
   MemoResults.Clear();
   MemoResults.Lines.Add
@@ -807,7 +808,8 @@ begin
       for I := 1 to n do
       begin
         MemoResults.Lines.Add('x[' + IntToStr(I) + ']:');
-        MemoResults.Lines.Add(Format('%e%s%e', [xi[I].a, CRLF, xi[I].b]));
+        iends_to_strings(xi[I], left, right);
+        MemoResults.Lines.Add(Format('%s%s%s', [left, CRLF, right]));
       end;
     end;
     MemoResults.Lines.Add('Liczba iteracji = ' + Format('%d', [it]));
