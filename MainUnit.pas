@@ -602,9 +602,6 @@ begin
       ShowMessage('B³¹d przy wczytywaniu przyk³adu!');
     end;
   end;
-
-  WriteLn(IntToStr(n));
-
 end;
 
 { WRITE EXAMPLE FROM MEMORY TO STRING-GRIDS }
