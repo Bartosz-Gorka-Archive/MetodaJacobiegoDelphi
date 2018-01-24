@@ -1,37 +1,16 @@
-## Welcome to GitHub Pages
+# Jacobi Delphi
 
-You can use the [editor on GitHub](https://github.com/Bartosz86/MetodaJacobiegoDelphi/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Welcome to the Jacobi repository page. Project prepared as a student's project - **Elementy analizy matematycznej** ([Prof. Andrzej Marciniak, Ph. D., Dr. Habil., Poznan University of Technology](http://www.cs.put.poznan.pl/amarciniak/)).
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Interval Arithmetic
 
-### Markdown
+I change library file `IntervalArithmetic32and64.pas`, add new methods used in project.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Project view
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Bartosz86/MetodaJacobiegoDelphi/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+![ProjectView](../master/Info.png)  
+_Completed code ready to use in Embarcadero Delphi._
 
 ### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Having trouble with code? You can [write issue](https://github.com/bartoszgorka/MetodaJacobiegoDelphi/issues) and I'll help you.
